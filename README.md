@@ -1,1 +1,1 @@
-# Panel_regressions_HSE
+# Panel_and_duration_analysis_HSE
