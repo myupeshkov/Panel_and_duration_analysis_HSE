@@ -1,0 +1,3534 @@
+----------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/mypeshkov/Desktop/hw_stata/log_2.log
+  log type:  text
+ opened on:   3 Oct 2021, 11:45:22
+
+. insheet using data_stata.csv, clear
+(19 vars, 294 obs)
+
+. 
+. *говорим стате, что работаем с панельными данными
+. egen country_id = group(country_label) 
+
+. encode country_label, generate(country) //нужно чтобы он нас понимал
+
+. 
+. xtset country year //говорим, что работаем с панелькой
+       panel variable:  country (strongly balanced)
+        time variable:  year, 2014 to 2020
+                delta:  1 unit
+
+. 
+. //создаем дамми-переменные на год
+. tab year, gen(year)
+
+       year |      Freq.     Percent        Cum.
+------------+-----------------------------------
+       2014 |         42       14.29       14.29
+       2015 |         42       14.29       28.57
+       2016 |         42       14.29       42.86
+       2017 |         42       14.29       57.14
+       2018 |         42       14.29       71.43
+       2019 |         42       14.29       85.71
+       2020 |         42       14.29      100.00
+------------+-----------------------------------
+      Total |        294      100.00
+
+. rename year# year#, addnumber(2014)
+
+. 
+. gen log_unemp =log(unemp)
+
+. gen log_startbus =log(startbusin)
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtset country_id year
+       panel variable:  country_id (strongly balanced)
+        time variable:  year, 2014 to 2020
+                delta:  1 unit
+
+. 
+. egen mean_growth_gdp =mean(growth_gdp), by(country_id)
+
+. egen mean_pol_stability =mean(pol_stability), by(country_id)
+
+. egen mean_inflation =mean(inflation), by(country_id)
+
+. egen mean_urban =mean(urban), by(country_id)
+
+. egen mean_log_unemp =mean(log_unemp), by(country_id)
+
+. egen mean_startbusin =mean(startbusin), by(country_id)
+
+. egen mean_log_popul =mean(log_popul), by(country_id)
+
+. 
+. gen dif_growth_gdp = growth_gdp - mean_growth_gdp
+
+. gen dif_pol_stability = pol_stability - mean_pol_stability
+
+. gen dif_inflation = inflation - mean_inflation
+
+. gen dif_urban = urban - mean_urban
+
+. gen dif_log_unemp = log_unemp - mean_log_unemp
+
+. gen dif_startbusin = startbusin - mean_startbusin
+
+. gen dif_log_popul = log_popul - mean_log_popul
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. scalar rss_ur=0
+
+. scalar n_ur=0
+
+. scalar df_ur=0
+
+. 
+. scalar list rss_ur n_ur df_ur
+    rss_ur =          0
+      n_ur =          0
+     df_ur =          0
+
+. forvalue i=1/42 {
+  2. qui reg dif_growth_gdp dif_pol_stability dif_inflation dif_urban dif_log_unemp year2020 if coun
+> try_id==`i' 
+  3. scalar z`i'=e(rss)
+  4. scalar df`i'=e(df_r)
+  5. scalar n`i'=e(N)
+  6. scalar rss_ur=rss_ur+z`i'
+  7. scalar n_ur=n_ur+n`i'
+  8. scalar df_ur=df_ur+df`i'
+  9. scalar list rss_ur n_ur df_ur
+ 10. }
+    rss_ur =  .07025366
+      n_ur =          7
+     df_ur =          1
+    rss_ur =  .07114572
+      n_ur =         14
+     df_ur =          2
+    rss_ur =   2.185612
+      n_ur =         21
+     df_ur =          3
+    rss_ur =  2.2005035
+      n_ur =         28
+     df_ur =          4
+    rss_ur =  2.3060378
+      n_ur =         35
+     df_ur =          5
+    rss_ur =  2.5613899
+      n_ur =         42
+     df_ur =          6
+    rss_ur =  3.1191667
+      n_ur =         49
+     df_ur =          7
+    rss_ur =  3.1269153
+      n_ur =         56
+     df_ur =          8
+    rss_ur =  4.8719051
+      n_ur =         63
+     df_ur =          9
+    rss_ur =  7.2388704
+      n_ur =         70
+     df_ur =         10
+    rss_ur =  7.5769308
+      n_ur =         77
+     df_ur =         11
+    rss_ur =  7.7871523
+      n_ur =         84
+     df_ur =         12
+    rss_ur =  7.7933282
+      n_ur =         91
+     df_ur =         13
+    rss_ur =   8.264862
+      n_ur =         98
+     df_ur =         14
+    rss_ur =   9.131703
+      n_ur =        105
+     df_ur =         15
+    rss_ur =  11.382538
+      n_ur =        112
+     df_ur =         17
+    rss_ur =  11.672687
+      n_ur =        119
+     df_ur =         18
+    rss_ur =  11.672794
+      n_ur =        126
+     df_ur =         19
+    rss_ur =  11.686202
+      n_ur =        133
+     df_ur =         20
+    rss_ur =  12.470081
+      n_ur =        140
+     df_ur =         21
+    rss_ur =  12.755042
+      n_ur =        147
+     df_ur =         22
+    rss_ur =  12.955039
+      n_ur =        154
+     df_ur =         23
+    rss_ur =  13.699639
+      n_ur =        161
+     df_ur =         24
+    rss_ur =  13.792431
+      n_ur =        168
+     df_ur =         25
+    rss_ur =  13.814804
+      n_ur =        175
+     df_ur =         26
+    rss_ur =  19.963421
+      n_ur =        182
+     df_ur =         27
+    rss_ur =  20.608187
+      n_ur =        189
+     df_ur =         28
+    rss_ur =  20.634556
+      n_ur =        196
+     df_ur =         29
+    rss_ur =  21.539661
+      n_ur =        203
+     df_ur =         30
+    rss_ur =  21.587276
+      n_ur =        210
+     df_ur =         31
+    rss_ur =  22.789012
+      n_ur =        217
+     df_ur =         32
+    rss_ur =  23.726414
+      n_ur =        224
+     df_ur =         33
+    rss_ur =  24.592839
+      n_ur =        231
+     df_ur =         34
+    rss_ur =  28.996897
+      n_ur =        238
+     df_ur =         35
+    rss_ur =  29.410663
+      n_ur =        245
+     df_ur =         36
+    rss_ur =  30.333703
+      n_ur =        252
+     df_ur =         37
+    rss_ur =  30.478915
+      n_ur =        259
+     df_ur =         38
+    rss_ur =  30.628414
+      n_ur =        266
+     df_ur =         39
+    rss_ur =  30.648542
+      n_ur =        273
+     df_ur =         40
+    rss_ur =  30.885491
+      n_ur =        280
+     df_ur =         41
+    rss_ur =  31.066584
+      n_ur =        287
+     df_ur =         42
+    rss_ur =  31.317657
+      n_ur =        294
+     df_ur =         43
+
+. scalar list rss_ur n_ur df_ur
+    rss_ur =  31.317657
+      n_ur =        294
+     df_ur =         43
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. qui reg dif_growth_gdp dif_pol_stability dif_inflation dif_urban dif_log_unemp year2020
+
+. scalar rss_r1 = e(rss)
+
+. scalar n_r1=e(N)
+
+. scalar df_r1=e(df_r)
+
+. scalar list rss_r1 n_r1 df_r1
+    rss_r1 =  651.09932
+      n_r1 =        294
+     df_r1 =        288
+
+. 
+. 
+. scalar list rss_r1 n_r1 df_r1
+    rss_r1 =  651.09932
+      n_r1 =        294
+     df_r1 =        288
+
+. scalar df_r1_cor = df_r1 - 41 //вычитаем N-1
+
+. scalar list rss_r1 n_r1 df_r1_cor
+    rss_r1 =  651.09932
+      n_r1 =        294
+ df_r1_cor =        247
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. qui reg growth_gdp pol_stability inflation urban log_popul log_unemp year2020
+
+. scalar rss_r2 = e(rss)
+
+. scalar n_r2=e(N)
+
+. scalar df_r2=e(df_r)
+
+. scalar list rss_r2 n_r2 df_r2
+    rss_r2 =  1002.2345
+      n_r2 =        294
+     df_r2 =        287
+
+. 
+. /* Calculation of F-statistics and  p-values */
+. /*********************************************************/
+. scalar fh1 =((rss_r1 - rss_ur)/(df_r1_cor-df_ur))/(rss_ur/df_ur)
+
+. scalar pval1 = Ftail(df_r1_cor-df_ur,df_ur,fh1)
+
+. 
+. scalar fh2 =((rss_r2 - rss_ur)/(df_r2-df_ur))/(rss_ur/df_ur)
+
+. scalar pval2 = Ftail(df_r2-df_ur,df_ur,fh2)
+
+. 
+. scalar fh3 =((rss_r2-rss_r1)/(df_r2-df_r1_cor))/(rss_r1/df_r1_cor)
+
+. scalar pval3 = Ftail(df_r2-df_r1_cor,df_r1_cor,fh3)
+
+. scalar list pval1 pval2 pval3  fh1 fh2 fh3
+     pval1 =  2.001e-07
+     pval2 =  1.883e-09
+     pval3 =  4.406e-09
+       fh1 =  4.1714568
+       fh2 =  5.4635055
+       fh3 =  3.3301516
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. gen dif_rule_of_law = rule_of_law - mean_rule_of_law
+mean_rule_of_law not found
+r(111);
+
+end of do-file
+
+r(111);
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. egen mean_rule_of_law =mean(rule_of_law), by(country_id)
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. gen dif_rule_of_law = rule_of_law - mean_rule_of_law
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. scalar rss_ur=0
+
+. scalar n_ur=0
+
+. scalar df_ur=0
+
+. 
+. scalar list rss_ur n_ur df_ur
+    rss_ur =          0
+      n_ur =          0
+     df_ur =          0
+
+. forvalue i=1/42 {
+  2. qui reg dif_growth_gdp dif_rule_of_law dif_inflation dif_urban dif_log_unemp year2020 if countr
+> y_id==`i' 
+  3. scalar z`i'=e(rss)
+  4. scalar df`i'=e(df_r)
+  5. scalar n`i'=e(N)
+  6. scalar rss_ur=rss_ur+z`i'
+  7. scalar n_ur=n_ur+n`i'
+  8. scalar df_ur=df_ur+df`i'
+  9. scalar list rss_ur n_ur df_ur
+ 10. }
+    rss_ur =  .07932946
+      n_ur =          7
+     df_ur =          1
+    rss_ur =  .09039412
+      n_ur =         14
+     df_ur =          2
+    rss_ur =  5.6678622
+      n_ur =         21
+     df_ur =          3
+    rss_ur =  6.2192319
+      n_ur =         28
+     df_ur =          4
+    rss_ur =  6.3860303
+      n_ur =         35
+     df_ur =          5
+    rss_ur =  7.9927899
+      n_ur =         42
+     df_ur =          6
+    rss_ur =  8.5380329
+      n_ur =         49
+     df_ur =          7
+    rss_ur =  9.0818019
+      n_ur =         56
+     df_ur =          8
+    rss_ur =  9.1105984
+      n_ur =         63
+     df_ur =          9
+    rss_ur =  10.447731
+      n_ur =         70
+     df_ur =         10
+    rss_ur =  10.675706
+      n_ur =         77
+     df_ur =         11
+    rss_ur =  10.949971
+      n_ur =         84
+     df_ur =         12
+    rss_ur =  12.145575
+      n_ur =         91
+     df_ur =         13
+    rss_ur =  12.345503
+      n_ur =         98
+     df_ur =         14
+    rss_ur =  12.465719
+      n_ur =        105
+     df_ur =         15
+    rss_ur =  21.465818
+      n_ur =        112
+     df_ur =         17
+    rss_ur =   21.67349
+      n_ur =        119
+     df_ur =         18
+    rss_ur =  21.674766
+      n_ur =        126
+     df_ur =         19
+    rss_ur =  21.742216
+      n_ur =        133
+     df_ur =         20
+    rss_ur =  23.857674
+      n_ur =        140
+     df_ur =         21
+    rss_ur =  26.630863
+      n_ur =        147
+     df_ur =         22
+    rss_ur =  26.653855
+      n_ur =        154
+     df_ur =         23
+    rss_ur =  30.319206
+      n_ur =        161
+     df_ur =         24
+    rss_ur =  32.062097
+      n_ur =        168
+     df_ur =         25
+    rss_ur =  32.072523
+      n_ur =        175
+     df_ur =         26
+    rss_ur =  38.324048
+      n_ur =        182
+     df_ur =         27
+    rss_ur =  38.370956
+      n_ur =        189
+     df_ur =         28
+    rss_ur =  38.469496
+      n_ur =        196
+     df_ur =         29
+    rss_ur =   39.29432
+      n_ur =        203
+     df_ur =         30
+    rss_ur =  39.380253
+      n_ur =        210
+     df_ur =         31
+    rss_ur =  41.086625
+      n_ur =        217
+     df_ur =         32
+    rss_ur =  41.092964
+      n_ur =        224
+     df_ur =         33
+    rss_ur =  42.500975
+      n_ur =        231
+     df_ur =         34
+    rss_ur =  45.618059
+      n_ur =        238
+     df_ur =         35
+    rss_ur =  45.715311
+      n_ur =        245
+     df_ur =         36
+    rss_ur =  47.617162
+      n_ur =        252
+     df_ur =         37
+    rss_ur =  47.826996
+      n_ur =        259
+     df_ur =         38
+    rss_ur =  50.648391
+      n_ur =        266
+     df_ur =         39
+    rss_ur =  52.912151
+      n_ur =        273
+     df_ur =         40
+    rss_ur =  53.208017
+      n_ur =        280
+     df_ur =         41
+    rss_ur =  53.570883
+      n_ur =        287
+     df_ur =         42
+    rss_ur =  53.765864
+      n_ur =        294
+     df_ur =         43
+
+. scalar list rss_ur n_ur df_ur
+    rss_ur =  53.765864
+      n_ur =        294
+     df_ur =         43
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. qui reg dif_growth_gdp dif_rule_of_law dif_inflation dif_urban dif_log_unemp year2020
+
+. scalar rss_r1 = e(rss)
+
+. scalar n_r1=e(N)
+
+. scalar df_r1=e(df_r)
+
+. scalar list rss_r1 n_r1 df_r1
+    rss_r1 =  650.73516
+      n_r1 =        294
+     df_r1 =        288
+
+. 
+. 
+. scalar list rss_r1 n_r1 df_r1
+    rss_r1 =  650.73516
+      n_r1 =        294
+     df_r1 =        288
+
+. scalar df_r1_cor = df_r1 - 41 //вычитаем N-1
+
+. scalar list rss_r1 n_r1 df_r1_cor
+    rss_r1 =  650.73516
+      n_r1 =        294
+ df_r1_cor =        247
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. qui reg growth_gdp rule_of_law inflation urban log_popul log_unemp year2020
+
+. scalar rss_r2 = e(rss)
+
+. scalar n_r2=e(N)
+
+. scalar df_r2=e(df_r)
+
+. scalar list rss_r2 n_r2 df_r2
+    rss_r2 =  974.24545
+      n_r2 =        294
+     df_r2 =        287
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. scalar fh1 =((rss_r1 - rss_ur)/(df_r1_cor-df_ur))/(rss_ur/df_ur)
+
+. scalar pval1 = Ftail(df_r1_cor-df_ur,df_ur,fh1)
+
+. 
+. scalar fh2 =((rss_r2 - rss_ur)/(df_r2-df_ur))/(rss_ur/df_ur)
+
+. scalar pval2 = Ftail(df_r2-df_ur,df_ur,fh2)
+
+. 
+. scalar fh3 =((rss_r2-rss_r1)/(df_r2-df_r1_cor))/(rss_r1/df_r1_cor)
+
+. scalar pval3 = Ftail(df_r2-df_r1_cor,df_r1_cor,fh3)
+
+. scalar list pval1 pval2 pval3  fh1 fh2 fh3
+     pval1 =  .00068973
+     pval2 =  .00002231
+     pval3 =  5.066e-08
+       fh1 =  2.3403653
+       fh2 =  3.0170754
+       fh3 =  3.0698757
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. reg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year
+> 2020
+
+      Source |       SS           df       MS      Number of obs   =       294
+-------------+----------------------------------   F(9, 284)       =     71.09
+       Model |  2090.12201         9  232.235779   Prob > F        =    0.0000
+    Residual |   927.79678       284  3.26689007   R-squared       =    0.6926
+-------------+----------------------------------   Adj R-squared   =    0.6828
+       Total |  3017.91879       293  10.3000641   Root MSE        =    1.8075
+
+------------------------------------------------------------------------------
+  growth_gdp |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .1083631   .2134821     0.51   0.612    -.3118447     .528571
+   inflation |   .1262209   .0426057     2.96   0.003     .0423579     .210084
+  startbusin |   .0294537   .0183249     1.61   0.109    -.0066162    .0655236
+       urban |  -.0566772   .0121105    -4.68   0.000    -.0805148   -.0328395
+   log_unemp |  -.6540491   .1845691    -3.54   0.000    -1.017346   -.2907522
+   schooling |  -.2624685   .1119157    -2.35   0.020    -.4827579    -.042179
+    dummy_eu |   .5647252   .2707946     2.09   0.038     .0317061    1.097744
+  dummy_oecd |   .4145454   .2982549     1.39   0.166    -.1725253    1.001616
+    year2020 |  -6.851072   .3056191   -22.42   0.000    -7.452638   -6.249506
+       _cons |   6.550032   2.008089     3.26   0.001     2.597405    10.50266
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. est store pool
+
+. 
+. //fe
+. xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd ye
+> ar2020, fe
+note: schooling omitted because of collinearity
+note: dummy_eu omitted because of collinearity
+note: dummy_oecd omitted because of collinearity
+
+Fixed-effects (within) regression               Number of obs     =        294
+Group variable: country_id                      Number of groups  =         42
+
+R-sq:                                           Obs per group:
+     within  = 0.7308                                         min =          7
+     between = 0.4449                                         avg =        7.0
+     overall = 0.6033                                         max =          7
+
+                                                F(6,246)          =     111.30
+corr(u_i, Xb)  = -0.4607                        Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+  growth_gdp |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .2546332   1.146545     0.22   0.824    -2.003664    2.512931
+   inflation |  -.0064615   .0581364    -0.11   0.912    -.1209701    .1080471
+  startbusin |   .0823714   .0540038     1.53   0.128    -.0239973    .1887402
+       urban |  -.1515103   .2194597    -0.69   0.491    -.5837701    .2807494
+   log_unemp |  -.5018369   .5248732    -0.96   0.340    -1.535656    .5319818
+   schooling |          0  (omitted)
+    dummy_eu |          0  (omitted)
+  dummy_oecd |          0  (omitted)
+    year2020 |  -6.954895   .3194138   -21.77   0.000     -7.58403   -6.325761
+       _cons |   6.762246   14.45517     0.47   0.640    -21.70944    35.23393
+-------------+----------------------------------------------------------------
+     sigma_u |  1.5634287
+     sigma_e |  1.6187903
+         rho |   .4826081   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(41, 246) = 3.02                     Prob > F = 0.0000
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. 
+. est store fe
+
+. 
+. //мультиколлинеарность конечно жесть, предлагаю убрать бизнес
+. vif, uncentered
+
+    Variable |       VIF       1/VIF  
+-------------+----------------------
+       urban |     41.23    0.024252
+  startbusin |     34.59    0.028909
+   log_unemp |      9.37    0.106721
+ rule_of_law |      2.66    0.375624
+   inflation |      2.41    0.415174
+    year2020 |      1.19    0.843311
+-------------+----------------------
+    Mean VIF |     15.24
+
+. 
+. //re
+. xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd ye
+> ar2020, re
+
+Random-effects GLS regression                   Number of obs     =        294
+Group variable: country_id                      Number of groups  =         42
+
+R-sq:                                           Obs per group:
+     within  = 0.7282                                         min =          7
+     between = 0.5425                                         avg =        7.0
+     overall = 0.6897                                         max =          7
+
+                                                Wald chi2(9)      =     703.85
+corr(u_i, X)   = 0 (assumed)                    Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+  growth_gdp |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .0544322   .3064073     0.18   0.859     -.546115    .6549794
+   inflation |   .0603543   .0472499     1.28   0.201    -.0322538    .1529625
+  startbusin |   .0411322   .0248444     1.66   0.098    -.0075619    .0898263
+       urban |  -.0587175   .0178475    -3.29   0.001     -.093698    -.023737
+   log_unemp |  -.5503452   .2501818    -2.20   0.028    -1.040693   -.0599979
+   schooling |  -.2035451   .1645112    -1.24   0.216    -.5259813     .118891
+    dummy_eu |   .4626505   .3996315     1.16   0.247    -.3206129    1.245914
+  dummy_oecd |   .2919518   .4440343     0.66   0.511    -.5783394    1.162243
+    year2020 |  -6.918537   .2785434   -24.84   0.000    -7.464472   -6.372602
+       _cons |   5.233325   2.774664     1.89   0.059    -.2049157    10.67157
+-------------+----------------------------------------------------------------
+     sigma_u |  .82906681
+     sigma_e |  1.6187903
+         rho |  .20779513   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. 
+. est store  re
+
+. 
+. //все таблицы
+. est tab pool fe re, b(%7.4f) stats (N r2) se
+
+--------------------------------------------------
+    Variable |   pool         fe          re      
+-------------+------------------------------------
+ rule_of_law |    0.1084      0.2546      0.0544  
+             |    0.2135      1.1465      0.3064  
+   inflation |    0.1262     -0.0065      0.0604  
+             |    0.0426      0.0581      0.0472  
+  startbusin |    0.0295      0.0824      0.0411  
+             |    0.0183      0.0540      0.0248  
+       urban |   -0.0567     -0.1515     -0.0587  
+             |    0.0121      0.2195      0.0178  
+   log_unemp |   -0.6540     -0.5018     -0.5503  
+             |    0.1846      0.5249      0.2502  
+   schooling |   -0.2625   (omitted)     -0.2035  
+             |    0.1119                  0.1645  
+    dummy_eu |    0.5647   (omitted)      0.4627  
+             |    0.2708                  0.3996  
+  dummy_oecd |    0.4145   (omitted)      0.2920  
+             |    0.2983                  0.4440  
+    year2020 |   -6.8511     -6.9549     -6.9185  
+             |    0.3056      0.3194      0.2785  
+       _cons |    6.5500      6.7622      5.2333  
+             |    2.0081     14.4552      2.7747  
+-------------+------------------------------------
+           N |       294         294         294  
+          r2 |    0.6926      0.7308              
+--------------------------------------------------
+                                      legend: b/se
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. est tab pool fe re, b(%7.4f) stats (N r2) star
+
+-----------------------------------------------------------
+    Variable |     pool            fe             re       
+-------------+---------------------------------------------
+ rule_of_law |    0.1084         0.2546         0.0544     
+   inflation |    0.1262**      -0.0065         0.0604     
+  startbusin |    0.0295         0.0824         0.0411     
+       urban |   -0.0567***     -0.1515        -0.0587**   
+   log_unemp |   -0.6540***     -0.5018        -0.5503*    
+   schooling |   -0.2625*     (omitted)        -0.2035     
+    dummy_eu |    0.5647*     (omitted)         0.4627     
+  dummy_oecd |    0.4145      (omitted)         0.2920     
+    year2020 |   -6.8511***     -6.9549***     -6.9185***  
+       _cons |    6.5500**       6.7622         5.2333     
+-------------+---------------------------------------------
+           N |       294            294            294     
+          r2 |    0.6926         0.7308                    
+-----------------------------------------------------------
+                   legend: * p<0.05; ** p<0.01; *** p<0.001
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xttest0
+
+Breusch and Pagan Lagrangian multiplier test for random effects
+
+        growth_gdp[country_id,t] = Xb + u[country_id] + e[country_id,t]
+
+        Estimated results:
+                         |       Var     sd = sqrt(Var)
+                ---------+-----------------------------
+               growth_~p |   10.30006       3.209371
+                       e |   2.620482        1.61879
+                       u |   .6873518       .8290668
+
+        Test:   Var(u) = 0
+                             chibar2(01) =    23.84
+                          Prob > chibar2 =   0.0000
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. hausman fe re 
+
+                 ---- Coefficients ----
+             |      (b)          (B)            (b-B)     sqrt(diag(V_b-V_B))
+             |       fe           re         Difference          S.E.
+-------------+----------------------------------------------------------------
+ rule_of_law |    .2546332     .0544322         .200201        1.104844
+   inflation |   -.0064615     .0603543       -.0668158        .0338716
+  startbusin |    .0823714     .0411322        .0412392        .0479496
+       urban |   -.1515103    -.0587175       -.0927928        .2187328
+   log_unemp |   -.5018369    -.5503452        .0485084        .4614119
+    year2020 |   -6.954895    -6.918537       -.0363583        .1563288
+------------------------------------------------------------------------------
+                           b = consistent under Ho and Ha; obtained from xtreg
+            B = inconsistent under Ha, efficient under Ho; obtained from xtreg
+
+    Test:  Ho:  difference in coefficients not systematic
+
+                  chi2(6) = (b-B)'[(V_b-V_B)^(-1)](b-B)
+                          =        8.03
+                Prob>chi2 =      0.2362
+                (V_b-V_B is not positive definite)
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. reg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year
+> 2015-year2020
+
+      Source |       SS           df       MS      Number of obs   =       294
+-------------+----------------------------------   F(14, 279)      =     46.49
+       Model |  2112.38952        14  150.884966   Prob > F        =    0.0000
+    Residual |   905.52927       279  3.24562462   R-squared       =    0.6999
+-------------+----------------------------------   Adj R-squared   =    0.6849
+       Total |  3017.91879       293  10.3000641   Root MSE        =    1.8016
+
+------------------------------------------------------------------------------
+  growth_gdp |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .1060492   .2144992     0.49   0.621    -.3161932    .5282917
+   inflation |   .1115172   .0432824     2.58   0.010     .0263157    .1967187
+  startbusin |   .0301718   .0184234     1.64   0.103    -.0060946    .0664383
+       urban |  -.0570113   .0121087    -4.71   0.000    -.0808473   -.0331753
+   log_unemp |  -.6284836   .1877977    -3.35   0.001     -.998164   -.2588032
+   schooling |  -.2528632   .1116747    -2.26   0.024    -.4726952   -.0330311
+    dummy_eu |    .535581   .2717814     1.97   0.050     .0005783    1.070584
+  dummy_oecd |   .3927582   .2974595     1.32   0.188    -.1927918    .9783083
+    year2015 |  -.1149487   .3948631    -0.29   0.771     -.892238    .6623406
+    year2016 |  -.2771827    .393957    -0.70   0.482    -1.052688    .4983229
+    year2017 |   .4887894   .3967228     1.23   0.219    -.2921606    1.269739
+    year2018 |   .3256808   .3995407     0.82   0.416    -.4608164    1.112178
+    year2019 |  -.3265169   .4005757    -0.82   0.416    -1.115051    .4620176
+    year2020 |  -6.846414   .4003245   -17.10   0.000    -7.634454   -6.058374
+       _cons |   6.421629   2.008549     3.20   0.002     2.467794    10.37546
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. est store pool_t
+
+. testparm year*
+
+ ( 1)  year2015 = 0
+ ( 2)  year2016 = 0
+ ( 3)  year2017 = 0
+ ( 4)  year2018 = 0
+ ( 5)  year2019 = 0
+ ( 6)  year2020 = 0
+
+       F(  6,   279) =   85.45
+            Prob > F =    0.0000
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. 
+. xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd ye
+> ar2015-year2020, fe
+note: schooling omitted because of collinearity
+note: dummy_eu omitted because of collinearity
+note: dummy_oecd omitted because of collinearity
+
+Fixed-effects (within) regression               Number of obs     =        294
+Group variable: country_id                      Number of groups  =         42
+
+R-sq:                                           Obs per group:
+     within  = 0.7452                                         min =          7
+     between = 0.4049                                         avg =        7.0
+     overall = 0.4099                                         max =          7
+
+                                                F(11,241)         =      64.08
+corr(u_i, Xb)  = -0.8134                        Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+  growth_gdp |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .7895882   1.166903     0.68   0.499    -1.509044     3.08822
+   inflation |  -.0487011   .0586617    -0.83   0.407    -.1642561     .066854
+  startbusin |   .0713063   .0537691     1.33   0.186     -.034611    .1772236
+       urban |   -.314261   .2657337    -1.18   0.238    -.8377182    .2091963
+   log_unemp |  -.2156051   .5671196    -0.38   0.704    -1.332749    .9015389
+   schooling |          0  (omitted)
+    dummy_eu |          0  (omitted)
+  dummy_oecd |          0  (omitted)
+    year2015 |  -.1657316    .358018    -0.46   0.644    -.8709756    .5395124
+    year2016 |  -.1960046   .3696506    -0.53   0.596    -.9241631    .5321539
+    year2017 |   .7950483   .4075076     1.95   0.052    -.0076831     1.59778
+    year2018 |   .7411384   .4530455     1.64   0.103    -.1512961    1.633573
+    year2019 |   .0334953   .4937731     0.07   0.946    -.9391667    1.006157
+    year2020 |  -6.617035   .5166101   -12.81   0.000    -7.634683   -5.599387
+       _cons |   18.82413   18.20903     1.03   0.302    -17.04504     54.6933
+-------------+----------------------------------------------------------------
+     sigma_u |   3.472495
+     sigma_e |   1.591123
+         rho |  .82647768   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(41, 241) = 3.20                     Prob > F = 0.0000
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. est store fe_t
+
+. testparm year*
+
+ ( 1)  year2015 = 0
+ ( 2)  year2016 = 0
+ ( 3)  year2017 = 0
+ ( 4)  year2018 = 0
+ ( 5)  year2019 = 0
+ ( 6)  year2020 = 0
+
+       F(  6,   241) =   84.06
+            Prob > F =    0.0000
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. 
+. xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd ye
+> ar2015-year2020, re
+
+Random-effects GLS regression                   Number of obs     =        294
+Group variable: country_id                      Number of groups  =         42
+
+R-sq:                                           Obs per group:
+     within  = 0.7410                                         min =          7
+     between = 0.5231                                         avg =        7.0
+     overall = 0.6960                                         max =          7
+
+                                                Wald chi2(14)     =     729.07
+corr(u_i, X)   = 0 (assumed)                    Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+  growth_gdp |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .0747966   .3138204     0.24   0.812      -.54028    .6898732
+   inflation |   .0318037   .0482424     0.66   0.510    -.0627497     .126357
+  startbusin |   .0406703   .0254658     1.60   0.110    -.0092417    .0905823
+       urban |  -.0601371    .018058    -3.33   0.001      -.09553   -.0247441
+   log_unemp |  -.4823557    .261268    -1.85   0.065    -.9944316    .0297201
+   schooling |  -.1838312   .1654248    -1.11   0.266    -.5080577    .1403954
+    dummy_eu |   .3908539   .4059892     0.96   0.336    -.4048704    1.186578
+  dummy_oecd |   .2483221   .4464681     0.56   0.578    -.6267392    1.123384
+    year2015 |  -.1763034   .3535446    -0.50   0.618    -.8692381    .5166312
+    year2016 |  -.2944394   .3526628    -0.83   0.404    -.9856458    .3967669
+    year2017 |   .5455205   .3581855     1.52   0.128    -.1565101    1.247551
+    year2018 |   .4013681   .3639478     1.10   0.270    -.3119564    1.114693
+    year2019 |   -.297909   .3674515    -0.81   0.418    -1.018101    .4222828
+    year2020 |  -6.906603   .3656863   -18.89   0.000    -7.623335    -6.18987
+       _cons |    5.15149   2.799705     1.84   0.066    -.3358307    10.63881
+-------------+----------------------------------------------------------------
+     sigma_u |  .83668326
+     sigma_e |   1.591123
+         rho |  .21661555   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. 
+. xttest0
+
+Breusch and Pagan Lagrangian multiplier test for random effects
+
+        growth_gdp[country_id,t] = Xb + u[country_id] + e[country_id,t]
+
+        Estimated results:
+                         |       Var     sd = sqrt(Var)
+                ---------+-----------------------------
+               growth_~p |   10.30006       3.209371
+                       e |   2.531672       1.591123
+                       u |   .7000389       .8366833
+
+        Test:   Var(u) = 0
+                             chibar2(01) =    27.85
+                          Prob > chibar2 =   0.0000
+
+. 
+. est store re_t
+
+. testparm year*
+
+ ( 1)  year2015 = 0
+ ( 2)  year2016 = 0
+ ( 3)  year2017 = 0
+ ( 4)  year2018 = 0
+ ( 5)  year2019 = 0
+ ( 6)  year2020 = 0
+
+           chi2(  6) =  641.43
+         Prob > chi2 =    0.0000
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. hausman fe_t re_t
+
+                 ---- Coefficients ----
+             |      (b)          (B)            (b-B)     sqrt(diag(V_b-V_B))
+             |      fe_t         re_t        Difference          S.E.
+-------------+----------------------------------------------------------------
+ rule_of_law |    .7895882     .0747966        .7147916        1.123913
+   inflation |   -.0487011     .0318037       -.0805048        .0333746
+  startbusin |    .0713063     .0406703         .030636        .0473562
+       urban |    -.314261    -.0601371       -.2541239        .2651195
+   log_unemp |   -.2156051    -.4823557        .2667506        .5033524
+    year2015 |   -.1657316    -.1763034        .0105718         .056419
+    year2016 |   -.1960046    -.2944394        .0984348        .1107724
+    year2017 |    .7950483     .5455205        .2495278        .1943338
+    year2018 |    .7411384     .4013681        .3397704        .2698004
+    year2019 |    .0334953     -.297909        .3314042        .3298351
+    year2020 |   -6.617035    -6.906603        .2895675        .3649102
+------------------------------------------------------------------------------
+                           b = consistent under Ho and Ha; obtained from xtreg
+            B = inconsistent under Ha, efficient under Ho; obtained from xtreg
+
+    Test:  Ho:  difference in coefficients not systematic
+
+                 chi2(11) = (b-B)'[(V_b-V_B)^(-1)](b-B)
+                          =       11.57
+                Prob>chi2 =      0.3972
+                (V_b-V_B is not positive definite)
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. qui xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oec
+> d year2015-year2020, re
+
+. 
+. xttest1
+
+Tests for the error component model:
+
+        growth_gdp[country_id,t] = Xb + u[country_id] + v[country_id,t]
+           v[country_id,t] = lambda v[country_id,(t-1)] + e[country_id,t]
+
+        Estimated results:
+                         |       Var     sd = sqrt(Var)
+                ---------+-----------------------------
+               growth_gdp |   10.30006       3.209371
+                       e |   2.531672      1.591123
+                       u |   .7000389      .83668326
+
+        Tests:
+           Random Effects, Two Sided:
+           ALM(Var(u)=0)         =    6.50 Pr>chi2(1) =  0.0108
+
+           Random Effects, One Sided:
+           ALM(Var(u)=0)         =    2.55 Pr>N(0,1)  =  0.0054
+
+           Serial Correlation:
+           ALM(lambda=0)         =   12.77 Pr>chi2(1) =  0.0004
+
+           Joint Test:
+           LM(Var(u)=0,lambda=0) =   40.63 Pr>chi2(2) =  0.0000
+
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtserial growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd
+>  year2015-year2020
+
+Wooldridge test for autocorrelation in panel data
+H0: no first order autocorrelation
+    F(  1,      41) =     10.120
+           Prob > F =      0.0028
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. qui xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oec
+> d year2015-year2020, fe
+
+. 
+. xtcsd, pesaran
+ 
+ 
+Pesaran's test of cross sectional independence =    -1.746, Pr = 0.0808
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. qui xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oec
+> d year2015-year2020, re
+
+. 
+. xtcsd, pesaran
+ 
+ 
+Pesaran's test of cross sectional independence =    -1.730, Pr = 0.0837
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. qui xtreg growth_gdp pol_stability inflation startbusin urban log_unemp schooling dummy_eu dummy_o
+> ecd year2015-year2020 i.country_id
+
+. 
+. xtcsd, pesaran
+ 
+ 
+Pesaran's test of cross sectional independence =    -1.727, Pr = 0.0841
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xi i.year i.country_id
+i.year            _Iyear_2014-2020    (naturally coded; _Iyear_2014 omitted)
+i.country_id      _Icountry_i_1-42    (naturally coded; _Icountry_i_1 omitted)
+
+. 
+. qui xtreg growth_gdp pol_stability inflation startbusin urban log_unemp schooling dummy_eu dummy_o
+> ecd _Iyear* _Icountry_i*
+
+. 
+. testparm _Iyear*
+
+ ( 1)  _Iyear_2015 = 0
+ ( 2)  _Iyear_2016 = 0
+ ( 3)  _Iyear_2017 = 0
+ ( 4)  _Iyear_2018 = 0
+ ( 5)  _Iyear_2019 = 0
+ ( 6)  _Iyear_2020 = 0
+
+           chi2(  6) =  514.57
+         Prob > chi2 =    0.0000
+
+. testparm _Icountry_i*
+
+ ( 1)  _Icountry_i_2 = 0
+ ( 2)  _Icountry_i_3 = 0
+ ( 3)  _Icountry_i_4 = 0
+ ( 4)  _Icountry_i_5 = 0
+ ( 5)  _Icountry_i_6 = 0
+ ( 6)  _Icountry_i_7 = 0
+ ( 7)  _Icountry_i_8 = 0
+ ( 8)  _Icountry_i_9 = 0
+ ( 9)  _Icountry_i_10 = 0
+ (10)  _Icountry_i_11 = 0
+ (11)  _Icountry_i_12 = 0
+ (12)  _Icountry_i_13 = 0
+ (13)  _Icountry_i_14 = 0
+ (14)  _Icountry_i_15 = 0
+ (15)  _Icountry_i_16 = 0
+ (16)  _Icountry_i_17 = 0
+ (17)  _Icountry_i_18 = 0
+ (18)  _Icountry_i_19 = 0
+ (19)  _Icountry_i_20 = 0
+ (20)  _Icountry_i_21 = 0
+ (21)  _Icountry_i_22 = 0
+ (22)  _Icountry_i_23 = 0
+ (23)  _Icountry_i_24 = 0
+ (24)  _Icountry_i_25 = 0
+ (25)  _Icountry_i_26 = 0
+ (26)  _Icountry_i_27 = 0
+ (27)  _Icountry_i_28 = 0
+ (28)  _Icountry_i_29 = 0
+ (29)  _Icountry_i_30 = 0
+ (30)  _Icountry_i_31 = 0
+ (31)  _Icountry_i_32 = 0
+ (32)  _Icountry_i_33 = 0
+ (33)  _Icountry_i_34 = 0
+ (34)  _Icountry_i_35 = 0
+ (35)  _Icountry_i_36 = 0
+ (36)  _Icountry_i_38 = 0
+ (37)  _Icountry_i_39 = 0
+ (38)  _Icountry_i_40 = 0
+
+           chi2( 38) =  116.21
+         Prob > chi2 =    0.0000
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. qui xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oec
+> d _Iyear* _Icountry_i*
+
+. 
+. testparm _Iyear*
+
+ ( 1)  _Iyear_2015 = 0
+ ( 2)  _Iyear_2016 = 0
+ ( 3)  _Iyear_2017 = 0
+ ( 4)  _Iyear_2018 = 0
+ ( 5)  _Iyear_2019 = 0
+ ( 6)  _Iyear_2020 = 0
+
+           chi2(  6) =  504.37
+         Prob > chi2 =    0.0000
+
+. testparm _Icountry_i*
+
+ ( 1)  _Icountry_i_2 = 0
+ ( 2)  _Icountry_i_3 = 0
+ ( 3)  _Icountry_i_4 = 0
+ ( 4)  _Icountry_i_5 = 0
+ ( 5)  _Icountry_i_6 = 0
+ ( 6)  _Icountry_i_7 = 0
+ ( 7)  _Icountry_i_8 = 0
+ ( 8)  _Icountry_i_9 = 0
+ ( 9)  _Icountry_i_10 = 0
+ (10)  _Icountry_i_11 = 0
+ (11)  _Icountry_i_12 = 0
+ (12)  _Icountry_i_13 = 0
+ (13)  _Icountry_i_14 = 0
+ (14)  _Icountry_i_15 = 0
+ (15)  _Icountry_i_16 = 0
+ (16)  _Icountry_i_17 = 0
+ (17)  _Icountry_i_18 = 0
+ (18)  _Icountry_i_19 = 0
+ (19)  _Icountry_i_20 = 0
+ (20)  _Icountry_i_21 = 0
+ (21)  _Icountry_i_22 = 0
+ (22)  _Icountry_i_23 = 0
+ (23)  _Icountry_i_24 = 0
+ (24)  _Icountry_i_25 = 0
+ (25)  _Icountry_i_26 = 0
+ (26)  _Icountry_i_27 = 0
+ (27)  _Icountry_i_28 = 0
+ (28)  _Icountry_i_29 = 0
+ (29)  _Icountry_i_30 = 0
+ (30)  _Icountry_i_31 = 0
+ (31)  _Icountry_i_32 = 0
+ (32)  _Icountry_i_33 = 0
+ (33)  _Icountry_i_34 = 0
+ (34)  _Icountry_i_35 = 0
+ (35)  _Icountry_i_36 = 0
+ (36)  _Icountry_i_38 = 0
+ (37)  _Icountry_i_39 = 0
+ (38)  _Icountry_i_40 = 0
+
+           chi2( 38) =  116.68
+         Prob > chi2 =    0.0000
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. qui xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oec
+> d year2015-year2020, fe
+
+. xttest3
+
+Modified Wald test for groupwise heteroskedasticity
+in fixed effect regression model
+
+H0: sigma(i)^2 = sigma^2 for all i
+
+chi2 (42)  =   14782.51
+Prob>chi2 =      0.0000
+
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. qui xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oec
+> d year2015-year2020, re
+
+. xttest3
+last estimates not xtreg, fe
+r(301);
+
+end of do-file
+
+r(301);
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. hist rule_of_law
+(bin=17, start=-1.0585247, width=.18754078)
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. reg growth_gdp rule_of_law inflation startbusin urban log_unemp log_popul schooling dummy_eu dummy
+> _oecd year2020
+
+      Source |       SS           df       MS      Number of obs   =       294
+-------------+----------------------------------   F(10, 283)      =     64.10
+       Model |  2093.55818        10  209.355818   Prob > F        =    0.0000
+    Residual |  924.360614       283  3.26629192   R-squared       =    0.6937
+-------------+----------------------------------   Adj R-squared   =    0.6829
+       Total |  3017.91879       293  10.3000641   Root MSE        =    1.8073
+
+------------------------------------------------------------------------------
+  growth_gdp |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .0752614   .2158884     0.35   0.728    -.3496895    .5002122
+   inflation |   .1208032    .042928     2.81   0.005     .0363044    .2053019
+  startbusin |   .0218755   .0197568     1.11   0.269    -.0170134    .0607645
+       urban |  -.0571343   .0121175    -4.72   0.000    -.0809863   -.0332823
+   log_unemp |  -.6679819   .1850514    -3.61   0.000    -1.032234     -.30373
+   log_popul |  -.0976574   .0952129    -1.03   0.306    -.2850728    .0897579
+   schooling |   -.256572    .112053    -2.29   0.023    -.4771351   -.0360089
+    dummy_eu |   .4341118   .2992202     1.45   0.148    -.1548678    1.023091
+  dummy_oecd |   .5467531   .3248915     1.68   0.094    -.0927574    1.186264
+    year2020 |   -6.83792     .30586   -22.36   0.000     -7.43997   -6.235871
+       _cons |   8.869078    3.02387     2.93   0.004     2.916947    14.82121
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. vif, uncentered
+
+    Variable |       VIF       1/VIF  
+-------------+----------------------
+   intercept |    823.04    0.001215
+  startbusin |    274.74    0.003640
+   log_popul |    230.89    0.004331
+   schooling |    120.09    0.008327
+       urban |     75.72    0.013207
+   log_unemp |     11.76    0.085010
+  dummy_oecd |      5.66    0.176824
+ rule_of_law |      5.32    0.187915
+    dummy_eu |      3.65    0.274297
+   inflation |      2.81    0.355902
+    year2020 |      1.20    0.831305
+-------------+----------------------
+    Mean VIF |    141.35
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. scalar list pval1 pval2 pval3  fh1 fh2 fh3
+     pval1 =  .00068973
+     pval2 =  .00002231
+     pval3 =  5.066e-08
+       fh1 =  2.3403653
+       fh2 =  3.0170754
+       fh3 =  3.0698757
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. reg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year
+> 2020
+
+      Source |       SS           df       MS      Number of obs   =       294
+-------------+----------------------------------   F(9, 284)       =     71.09
+       Model |  2090.12201         9  232.235779   Prob > F        =    0.0000
+    Residual |   927.79678       284  3.26689007   R-squared       =    0.6926
+-------------+----------------------------------   Adj R-squared   =    0.6828
+       Total |  3017.91879       293  10.3000641   Root MSE        =    1.8075
+
+------------------------------------------------------------------------------
+  growth_gdp |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .1083631   .2134821     0.51   0.612    -.3118447     .528571
+   inflation |   .1262209   .0426057     2.96   0.003     .0423579     .210084
+  startbusin |   .0294537   .0183249     1.61   0.109    -.0066162    .0655236
+       urban |  -.0566772   .0121105    -4.68   0.000    -.0805148   -.0328395
+   log_unemp |  -.6540491   .1845691    -3.54   0.000    -1.017346   -.2907522
+   schooling |  -.2624685   .1119157    -2.35   0.020    -.4827579    -.042179
+    dummy_eu |   .5647252   .2707946     2.09   0.038     .0317061    1.097744
+  dummy_oecd |   .4145454   .2982549     1.39   0.166    -.1725253    1.001616
+    year2020 |  -6.851072   .3056191   -22.42   0.000    -7.452638   -6.249506
+       _cons |   6.550032   2.008089     3.26   0.001     2.597405    10.50266
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. reg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year
+> 2015-year2020
+
+      Source |       SS           df       MS      Number of obs   =       294
+-------------+----------------------------------   F(14, 279)      =     46.49
+       Model |  2112.38952        14  150.884966   Prob > F        =    0.0000
+    Residual |   905.52927       279  3.24562462   R-squared       =    0.6999
+-------------+----------------------------------   Adj R-squared   =    0.6849
+       Total |  3017.91879       293  10.3000641   Root MSE        =    1.8016
+
+------------------------------------------------------------------------------
+  growth_gdp |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .1060492   .2144992     0.49   0.621    -.3161932    .5282917
+   inflation |   .1115172   .0432824     2.58   0.010     .0263157    .1967187
+  startbusin |   .0301718   .0184234     1.64   0.103    -.0060946    .0664383
+       urban |  -.0570113   .0121087    -4.71   0.000    -.0808473   -.0331753
+   log_unemp |  -.6284836   .1877977    -3.35   0.001     -.998164   -.2588032
+   schooling |  -.2528632   .1116747    -2.26   0.024    -.4726952   -.0330311
+    dummy_eu |    .535581   .2717814     1.97   0.050     .0005783    1.070584
+  dummy_oecd |   .3927582   .2974595     1.32   0.188    -.1927918    .9783083
+    year2015 |  -.1149487   .3948631    -0.29   0.771     -.892238    .6623406
+    year2016 |  -.2771827    .393957    -0.70   0.482    -1.052688    .4983229
+    year2017 |   .4887894   .3967228     1.23   0.219    -.2921606    1.269739
+    year2018 |   .3256808   .3995407     0.82   0.416    -.4608164    1.112178
+    year2019 |  -.3265169   .4005757    -0.82   0.416    -1.115051    .4620176
+    year2020 |  -6.846414   .4003245   -17.10   0.000    -7.634454   -6.058374
+       _cons |   6.421629   2.008549     3.20   0.002     2.467794    10.37546
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. reg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year
+> 2014-year2020
+note: year2020 omitted because of collinearity
+
+      Source |       SS           df       MS      Number of obs   =       294
+-------------+----------------------------------   F(14, 279)      =     46.49
+       Model |  2112.38952        14  150.884966   Prob > F        =    0.0000
+    Residual |   905.52927       279  3.24562462   R-squared       =    0.6999
+-------------+----------------------------------   Adj R-squared   =    0.6849
+       Total |  3017.91879       293  10.3000641   Root MSE        =    1.8016
+
+------------------------------------------------------------------------------
+  growth_gdp |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .1060492   .2144992     0.49   0.621    -.3161932    .5282917
+   inflation |   .1115172   .0432824     2.58   0.010     .0263157    .1967187
+  startbusin |   .0301718   .0184234     1.64   0.103    -.0060946    .0664383
+       urban |  -.0570113   .0121087    -4.71   0.000    -.0808473   -.0331753
+   log_unemp |  -.6284836   .1877977    -3.35   0.001     -.998164   -.2588032
+   schooling |  -.2528632   .1116747    -2.26   0.024    -.4726952   -.0330311
+    dummy_eu |    .535581   .2717814     1.97   0.050     .0005783    1.070584
+  dummy_oecd |   .3927582   .2974595     1.32   0.188    -.1927918    .9783083
+    year2014 |   6.846414   .4003245    17.10   0.000     6.058374    7.634454
+    year2015 |   6.731466    .396906    16.96   0.000     5.950155    7.512776
+    year2016 |   6.569232   .3963473    16.57   0.000     5.789021    7.349443
+    year2017 |   7.335204   .3986348    18.40   0.000      6.55049    8.119918
+    year2018 |   7.172095    .399953    17.93   0.000     6.384787    7.959404
+    year2019 |   6.519898   .3964882    16.44   0.000     5.739409    7.300386
+    year2020 |          0  (omitted)
+       _cons |  -.4247858   2.065647    -0.21   0.837    -4.491018    3.641446
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. reg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year
+> 2015-year2020
+
+      Source |       SS           df       MS      Number of obs   =       294
+-------------+----------------------------------   F(14, 279)      =     46.49
+       Model |  2112.38952        14  150.884966   Prob > F        =    0.0000
+    Residual |   905.52927       279  3.24562462   R-squared       =    0.6999
+-------------+----------------------------------   Adj R-squared   =    0.6849
+       Total |  3017.91879       293  10.3000641   Root MSE        =    1.8016
+
+------------------------------------------------------------------------------
+  growth_gdp |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .1060492   .2144992     0.49   0.621    -.3161932    .5282917
+   inflation |   .1115172   .0432824     2.58   0.010     .0263157    .1967187
+  startbusin |   .0301718   .0184234     1.64   0.103    -.0060946    .0664383
+       urban |  -.0570113   .0121087    -4.71   0.000    -.0808473   -.0331753
+   log_unemp |  -.6284836   .1877977    -3.35   0.001     -.998164   -.2588032
+   schooling |  -.2528632   .1116747    -2.26   0.024    -.4726952   -.0330311
+    dummy_eu |    .535581   .2717814     1.97   0.050     .0005783    1.070584
+  dummy_oecd |   .3927582   .2974595     1.32   0.188    -.1927918    .9783083
+    year2015 |  -.1149487   .3948631    -0.29   0.771     -.892238    .6623406
+    year2016 |  -.2771827    .393957    -0.70   0.482    -1.052688    .4983229
+    year2017 |   .4887894   .3967228     1.23   0.219    -.2921606    1.269739
+    year2018 |   .3256808   .3995407     0.82   0.416    -.4608164    1.112178
+    year2019 |  -.3265169   .4005757    -0.82   0.416    -1.115051    .4620176
+    year2020 |  -6.846414   .4003245   -17.10   0.000    -7.634454   -6.058374
+       _cons |   6.421629   2.008549     3.20   0.002     2.467794    10.37546
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. testparm year*
+
+ ( 1)  year2015 = 0
+ ( 2)  year2016 = 0
+ ( 3)  year2017 = 0
+ ( 4)  year2018 = 0
+ ( 5)  year2019 = 0
+ ( 6)  year2020 = 0
+
+       F(  6,   279) =   85.45
+            Prob > F =    0.0000
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. hausman fe_t re_t
+
+                 ---- Coefficients ----
+             |      (b)          (B)            (b-B)     sqrt(diag(V_b-V_B))
+             |      fe_t         re_t        Difference          S.E.
+-------------+----------------------------------------------------------------
+ rule_of_law |    .7895882     .0747966        .7147916        1.123913
+   inflation |   -.0487011     .0318037       -.0805048        .0333746
+  startbusin |    .0713063     .0406703         .030636        .0473562
+       urban |    -.314261    -.0601371       -.2541239        .2651195
+   log_unemp |   -.2156051    -.4823557        .2667506        .5033524
+    year2015 |   -.1657316    -.1763034        .0105718         .056419
+    year2016 |   -.1960046    -.2944394        .0984348        .1107724
+    year2017 |    .7950483     .5455205        .2495278        .1943338
+    year2018 |    .7411384     .4013681        .3397704        .2698004
+    year2019 |    .0334953     -.297909        .3314042        .3298351
+    year2020 |   -6.617035    -6.906603        .2895675        .3649102
+------------------------------------------------------------------------------
+                           b = consistent under Ho and Ha; obtained from xtreg
+            B = inconsistent under Ha, efficient under Ho; obtained from xtreg
+
+    Test:  Ho:  difference in coefficients not systematic
+
+                 chi2(11) = (b-B)'[(V_b-V_B)^(-1)](b-B)
+                          =       11.57
+                Prob>chi2 =      0.3972
+                (V_b-V_B is not positive definite)
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. qui xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oec
+> d year2015-year2020, re
+
+. 
+. xttest1
+
+Tests for the error component model:
+
+        growth_gdp[country_id,t] = Xb + u[country_id] + v[country_id,t]
+           v[country_id,t] = lambda v[country_id,(t-1)] + e[country_id,t]
+
+        Estimated results:
+                         |       Var     sd = sqrt(Var)
+                ---------+-----------------------------
+               growth_gdp |   10.30006       3.209371
+                       e |   2.531672      1.591123
+                       u |   .7000389      .83668326
+
+        Tests:
+           Random Effects, Two Sided:
+           ALM(Var(u)=0)         =    6.50 Pr>chi2(1) =  0.0108
+
+           Random Effects, One Sided:
+           ALM(Var(u)=0)         =    2.55 Pr>N(0,1)  =  0.0054
+
+           Serial Correlation:
+           ALM(lambda=0)         =   12.77 Pr>chi2(1) =  0.0004
+
+           Joint Test:
+           LM(Var(u)=0,lambda=0) =   40.63 Pr>chi2(2) =  0.0000
+
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtserial growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd
+>  year2015-year2020
+
+Wooldridge test for autocorrelation in panel data
+H0: no first order autocorrelation
+    F(  1,      41) =     10.120
+           Prob > F =      0.0028
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. qui xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oec
+> d year2015-year2020, fe
+
+. 
+. xtcsd, pesaran
+ 
+ 
+Pesaran's test of cross sectional independence =    -1.746, Pr = 0.0808
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. qui xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oec
+> d _Iyear* _Icountry_i*
+
+. 
+. testparm _Iyear*
+
+ ( 1)  _Iyear_2015 = 0
+ ( 2)  _Iyear_2016 = 0
+ ( 3)  _Iyear_2017 = 0
+ ( 4)  _Iyear_2018 = 0
+ ( 5)  _Iyear_2019 = 0
+ ( 6)  _Iyear_2020 = 0
+
+           chi2(  6) =  504.37
+         Prob > chi2 =    0.0000
+
+. testparm _Icountry_i*
+
+ ( 1)  _Icountry_i_2 = 0
+ ( 2)  _Icountry_i_3 = 0
+ ( 3)  _Icountry_i_4 = 0
+ ( 4)  _Icountry_i_5 = 0
+ ( 5)  _Icountry_i_6 = 0
+ ( 6)  _Icountry_i_7 = 0
+ ( 7)  _Icountry_i_8 = 0
+ ( 8)  _Icountry_i_9 = 0
+ ( 9)  _Icountry_i_10 = 0
+ (10)  _Icountry_i_11 = 0
+ (11)  _Icountry_i_12 = 0
+ (12)  _Icountry_i_13 = 0
+ (13)  _Icountry_i_14 = 0
+ (14)  _Icountry_i_15 = 0
+ (15)  _Icountry_i_16 = 0
+ (16)  _Icountry_i_17 = 0
+ (17)  _Icountry_i_18 = 0
+ (18)  _Icountry_i_19 = 0
+ (19)  _Icountry_i_20 = 0
+ (20)  _Icountry_i_21 = 0
+ (21)  _Icountry_i_22 = 0
+ (22)  _Icountry_i_23 = 0
+ (23)  _Icountry_i_24 = 0
+ (24)  _Icountry_i_25 = 0
+ (25)  _Icountry_i_26 = 0
+ (26)  _Icountry_i_27 = 0
+ (27)  _Icountry_i_28 = 0
+ (28)  _Icountry_i_29 = 0
+ (29)  _Icountry_i_30 = 0
+ (30)  _Icountry_i_31 = 0
+ (31)  _Icountry_i_32 = 0
+ (32)  _Icountry_i_33 = 0
+ (33)  _Icountry_i_34 = 0
+ (34)  _Icountry_i_35 = 0
+ (35)  _Icountry_i_36 = 0
+ (36)  _Icountry_i_38 = 0
+ (37)  _Icountry_i_39 = 0
+ (38)  _Icountry_i_40 = 0
+
+           chi2( 38) =  116.68
+         Prob > chi2 =    0.0000
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtregar growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd 
+> year2015-year2020, re
+
+RE GLS regression with AR(1) disturbances       Number of obs     =        294
+Group variable: country_id                      Number of groups  =         42
+
+R-sq:                                           Obs per group:
+     within  = 0.7383                                         min =          7
+     between = 0.5472                                         avg =        7.0
+     overall = 0.6980                                         max =          7
+
+                                                Wald chi2(15)     =     701.11
+corr(u_i, Xb)      = 0 (assumed)                Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+  growth_gdp |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .1085627   .3078755     0.35   0.724    -.4948621    .7119876
+   inflation |   .0638591    .047965     1.33   0.183    -.0301505    .1578688
+  startbusin |   .0326358    .025743     1.27   0.205    -.0178195    .0830912
+       urban |  -.0537722   .0176899    -3.04   0.002    -.0884437   -.0191007
+   log_unemp |  -.5697704   .2627675    -2.17   0.030    -1.084785   -.0547556
+   schooling |  -.2263129   .1620014    -1.40   0.162    -.5438298    .0912039
+    dummy_eu |   .3225535   .3949905     0.82   0.414    -.4516137    1.096721
+  dummy_oecd |   .3366971   .4351304     0.77   0.439    -.5161428    1.189537
+    year2015 |  -.1504699   .3139447    -0.48   0.632    -.7657902    .4648504
+    year2016 |  -.2863198   .3585938    -0.80   0.425    -.9891508    .4165111
+    year2017 |   .5232697   .3771227     1.39   0.165    -.2158772    1.262417
+    year2018 |   .3687388   .3866379     0.95   0.340    -.3890576    1.126535
+    year2019 |  -.3103654   .3910833    -0.79   0.427    -1.076875    .4561438
+    year2020 |  -6.877101   .3898765   -17.64   0.000    -7.641245   -6.112957
+       _cons |   5.845839   2.809693     2.08   0.037     .3389413    11.35274
+-------------+----------------------------------------------------------------
+      rho_ar |  .31665584   (estimated autocorrelation coefficient)
+     sigma_u |  .52719132
+     sigma_e |  1.5939424
+     rho_fov |  .09860652   (fraction of variance due to u_i)
+       theta |  .15632632
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtsum growth_gdp pol_stability rule_of_law voice_account schooling inflation startbusin urban popu
+> l log_popul unemp log_unemp dummy_eu dummy_oecd
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+growth~p overall |  1.010239   3.209371  -11.24952   6.016398 |     N =     294
+         between |             1.473801  -1.846884   5.040893 |     n =      42
+         within  |             2.858751  -12.48592   5.238862 |     T =       7
+                 |                                            |
+pol_st~y overall |  .2554473   .7288585  -2.009063   1.595223 |     N =     294
+         between |             .7213361   -1.46513   1.505571 |     n =      42
+         within  |             .1468469  -.6000732   .7753333 |     T =       7
+                 |                                            |
+rule_o~w overall |  .6836112   .8966047  -1.058525   2.129668 |     N =     294
+         between |             .9018592  -.7748707   2.079257 |     n =      42
+         within  |             .0848859   .3999572   .9324266 |     T =       7
+                 |                                            |
+voice_~t overall |  .6077528   .7985696  -1.476469   1.725093 |     N =     294
+         between |             .8032657  -1.397253   1.686849 |     n =      42
+         within  |              .075436    .294564   .9216549 |     T =       7
+                 |                                            |
+school~g overall |  10.21429   1.391711          8         13 |     N =     294
+         between |             1.406183          8         13 |     n =      42
+         within  |                    0   10.21429   10.21429 |     T =       7
+                 |                                            |
+inflat~n overall |  2.837639   2.986204  -3.746191   16.61368 |     N =     294
+         between |             2.485684  -.5423685   11.36661 |     n =      42
+         within  |             1.692724  -2.887489   9.953908 |     T =       7
+                 |                                            |
+startb~n overall |  88.05578   8.132555       59.1        100 |     N =     294
+         between |             7.906239   67.62857        100 |     n =      42
+         within  |             2.215823   75.69864   100.2986 |     T =       7
+                 |                                            |
+urban    overall |   74.2238   14.85081     33.115        100 |     N =     294
+         between |              14.9928   35.21914        100 |     n =      42
+         within  |              .604663   71.97308   76.46008 |     T =       7
+                 |                                            |
+popul    overall |  5.02e+07   7.11e+07     556319   3.29e+08 |     N =     294
+         between |             7.18e+07   594928.4   3.25e+08 |     n =      42
+         within  |              1524060   4.08e+07   5.92e+07 |     T =       7
+                 |                                            |
+log_po~l overall |  16.75177   1.530053    13.2291   19.61304 |     N =     294
+         between |             1.545823   13.29529   19.59794 |     n =      42
+         within  |             .0206216   16.68558   16.81356 |     T =       7
+                 |                                            |
+unemp    overall |  7.733333    5.38583        .58      29.22 |     N =     294
+         between |             5.182877   .7557143   26.88857 |     n =      42
+         within  |             1.641653   2.701904   13.85476 |     T =       7
+                 |                                            |
+log_un~p overall |  1.836841   .6662712  -.5447272   3.374853 |     N =     294
+         between |             .6448599  -.3010721   3.290214 |     n =      42
+         within  |             .1912816   1.346729   2.418272 |     T =       7
+                 |                                            |
+dummy_eu overall |   .452381   .4985759          0          1 |     N =     294
+         between |             .5037605          0          1 |     n =      42
+         within  |                    0    .452381    .452381 |     T =       7
+                 |                                            |
+dummy_~d overall |  .5952381   .4916828          0          1 |     N =     294
+         between |             .4967958          0          1 |     n =      42
+         within  |                    0   .5952381   .5952381 |     T =       7
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtsum growth_gdp rule_of_law schooling inflation startbusin urban log_popul unemp log_unemp dummy_
+> eu dummy_oecd covid_year
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+growth~p overall |  1.010239   3.209371  -11.24952   6.016398 |     N =     294
+         between |             1.473801  -1.846884   5.040893 |     n =      42
+         within  |             2.858751  -12.48592   5.238862 |     T =       7
+                 |                                            |
+rule_o~w overall |  .6836112   .8966047  -1.058525   2.129668 |     N =     294
+         between |             .9018592  -.7748707   2.079257 |     n =      42
+         within  |             .0848859   .3999572   .9324266 |     T =       7
+                 |                                            |
+school~g overall |  10.21429   1.391711          8         13 |     N =     294
+         between |             1.406183          8         13 |     n =      42
+         within  |                    0   10.21429   10.21429 |     T =       7
+                 |                                            |
+inflat~n overall |  2.837639   2.986204  -3.746191   16.61368 |     N =     294
+         between |             2.485684  -.5423685   11.36661 |     n =      42
+         within  |             1.692724  -2.887489   9.953908 |     T =       7
+                 |                                            |
+startb~n overall |  88.05578   8.132555       59.1        100 |     N =     294
+         between |             7.906239   67.62857        100 |     n =      42
+         within  |             2.215823   75.69864   100.2986 |     T =       7
+                 |                                            |
+urban    overall |   74.2238   14.85081     33.115        100 |     N =     294
+         between |              14.9928   35.21914        100 |     n =      42
+         within  |              .604663   71.97308   76.46008 |     T =       7
+                 |                                            |
+log_po~l overall |  16.75177   1.530053    13.2291   19.61304 |     N =     294
+         between |             1.545823   13.29529   19.59794 |     n =      42
+         within  |             .0206216   16.68558   16.81356 |     T =       7
+                 |                                            |
+unemp    overall |  7.733333    5.38583        .58      29.22 |     N =     294
+         between |             5.182877   .7557143   26.88857 |     n =      42
+         within  |             1.641653   2.701904   13.85476 |     T =       7
+                 |                                            |
+log_un~p overall |  1.836841   .6662712  -.5447272   3.374853 |     N =     294
+         between |             .6448599  -.3010721   3.290214 |     n =      42
+         within  |             .1912816   1.346729   2.418272 |     T =       7
+                 |                                            |
+dummy_eu overall |   .452381   .4985759          0          1 |     N =     294
+         between |             .5037605          0          1 |     n =      42
+         within  |                    0    .452381    .452381 |     T =       7
+                 |                                            |
+dummy_~d overall |  .5952381   .4916828          0          1 |     N =     294
+         between |             .4967958          0          1 |     n =      42
+         within  |                    0   .5952381   .5952381 |     T =       7
+                 |                                            |
+covid_~r overall |  .1428571   .3505237          0          1 |     N =     294
+         between |                    0   .1428571   .1428571 |     n =      42
+         within  |             .3505237          0          1 |     T =       7
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtsum growth_gdp rule_of_law schooling inflation startbusin urban log_popul log_unemp dummy_eu dum
+> my_oecd covid_year
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+growth~p overall |  1.010239   3.209371  -11.24952   6.016398 |     N =     294
+         between |             1.473801  -1.846884   5.040893 |     n =      42
+         within  |             2.858751  -12.48592   5.238862 |     T =       7
+                 |                                            |
+rule_o~w overall |  .6836112   .8966047  -1.058525   2.129668 |     N =     294
+         between |             .9018592  -.7748707   2.079257 |     n =      42
+         within  |             .0848859   .3999572   .9324266 |     T =       7
+                 |                                            |
+school~g overall |  10.21429   1.391711          8         13 |     N =     294
+         between |             1.406183          8         13 |     n =      42
+         within  |                    0   10.21429   10.21429 |     T =       7
+                 |                                            |
+inflat~n overall |  2.837639   2.986204  -3.746191   16.61368 |     N =     294
+         between |             2.485684  -.5423685   11.36661 |     n =      42
+         within  |             1.692724  -2.887489   9.953908 |     T =       7
+                 |                                            |
+startb~n overall |  88.05578   8.132555       59.1        100 |     N =     294
+         between |             7.906239   67.62857        100 |     n =      42
+         within  |             2.215823   75.69864   100.2986 |     T =       7
+                 |                                            |
+urban    overall |   74.2238   14.85081     33.115        100 |     N =     294
+         between |              14.9928   35.21914        100 |     n =      42
+         within  |              .604663   71.97308   76.46008 |     T =       7
+                 |                                            |
+log_po~l overall |  16.75177   1.530053    13.2291   19.61304 |     N =     294
+         between |             1.545823   13.29529   19.59794 |     n =      42
+         within  |             .0206216   16.68558   16.81356 |     T =       7
+                 |                                            |
+log_un~p overall |  1.836841   .6662712  -.5447272   3.374853 |     N =     294
+         between |             .6448599  -.3010721   3.290214 |     n =      42
+         within  |             .1912816   1.346729   2.418272 |     T =       7
+                 |                                            |
+dummy_eu overall |   .452381   .4985759          0          1 |     N =     294
+         between |             .5037605          0          1 |     n =      42
+         within  |                    0    .452381    .452381 |     T =       7
+                 |                                            |
+dummy_~d overall |  .5952381   .4916828          0          1 |     N =     294
+         between |             .4967958          0          1 |     n =      42
+         within  |                    0   .5952381   .5952381 |     T =       7
+                 |                                            |
+covid_~r overall |  .1428571   .3505237          0          1 |     N =     294
+         between |                    0   .1428571   .1428571 |     n =      42
+         within  |             .3505237          0          1 |     T =       7
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtsum growth_gdp rule_of_law schooling inflation startbusin urban log_popul unemp dummy_eu dummy_o
+> ecd covid_year
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+growth~p overall |  1.010239   3.209371  -11.24952   6.016398 |     N =     294
+         between |             1.473801  -1.846884   5.040893 |     n =      42
+         within  |             2.858751  -12.48592   5.238862 |     T =       7
+                 |                                            |
+rule_o~w overall |  .6836112   .8966047  -1.058525   2.129668 |     N =     294
+         between |             .9018592  -.7748707   2.079257 |     n =      42
+         within  |             .0848859   .3999572   .9324266 |     T =       7
+                 |                                            |
+school~g overall |  10.21429   1.391711          8         13 |     N =     294
+         between |             1.406183          8         13 |     n =      42
+         within  |                    0   10.21429   10.21429 |     T =       7
+                 |                                            |
+inflat~n overall |  2.837639   2.986204  -3.746191   16.61368 |     N =     294
+         between |             2.485684  -.5423685   11.36661 |     n =      42
+         within  |             1.692724  -2.887489   9.953908 |     T =       7
+                 |                                            |
+startb~n overall |  88.05578   8.132555       59.1        100 |     N =     294
+         between |             7.906239   67.62857        100 |     n =      42
+         within  |             2.215823   75.69864   100.2986 |     T =       7
+                 |                                            |
+urban    overall |   74.2238   14.85081     33.115        100 |     N =     294
+         between |              14.9928   35.21914        100 |     n =      42
+         within  |              .604663   71.97308   76.46008 |     T =       7
+                 |                                            |
+log_po~l overall |  16.75177   1.530053    13.2291   19.61304 |     N =     294
+         between |             1.545823   13.29529   19.59794 |     n =      42
+         within  |             .0206216   16.68558   16.81356 |     T =       7
+                 |                                            |
+unemp    overall |  7.733333    5.38583        .58      29.22 |     N =     294
+         between |             5.182877   .7557143   26.88857 |     n =      42
+         within  |             1.641653   2.701904   13.85476 |     T =       7
+                 |                                            |
+dummy_eu overall |   .452381   .4985759          0          1 |     N =     294
+         between |             .5037605          0          1 |     n =      42
+         within  |                    0    .452381    .452381 |     T =       7
+                 |                                            |
+dummy_~d overall |  .5952381   .4916828          0          1 |     N =     294
+         between |             .4967958          0          1 |     n =      42
+         within  |                    0   .5952381   .5952381 |     T =       7
+                 |                                            |
+covid_~r overall |  .1428571   .3505237          0          1 |     N =     294
+         between |                    0   .1428571   .1428571 |     n =      42
+         within  |             .3505237          0          1 |     T =       7
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. qui xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oec
+> d year2015-year2020, re
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xttest1
+
+Tests for the error component model:
+
+        growth_gdp[country_id,t] = Xb + u[country_id] + v[country_id,t]
+           v[country_id,t] = lambda v[country_id,(t-1)] + e[country_id,t]
+
+        Estimated results:
+                         |       Var     sd = sqrt(Var)
+                ---------+-----------------------------
+               growth_gdp |   10.30006       3.209371
+                       e |   2.531672      1.591123
+                       u |   .7000389      .83668326
+
+        Tests:
+           Random Effects, Two Sided:
+           ALM(Var(u)=0)         =    6.50 Pr>chi2(1) =  0.0108
+
+           Random Effects, One Sided:
+           ALM(Var(u)=0)         =    2.55 Pr>N(0,1)  =  0.0054
+
+           Serial Correlation:
+           ALM(lambda=0)         =   12.77 Pr>chi2(1) =  0.0004
+
+           Joint Test:
+           LM(Var(u)=0,lambda=0) =   40.63 Pr>chi2(2) =  0.0000
+
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. qui xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oec
+> d year2015-year2020, re
+
+. 
+. xttest1
+
+Tests for the error component model:
+
+        growth_gdp[country_id,t] = Xb + u[country_id] + v[country_id,t]
+           v[country_id,t] = lambda v[country_id,(t-1)] + e[country_id,t]
+
+        Estimated results:
+                         |       Var     sd = sqrt(Var)
+                ---------+-----------------------------
+               growth_gdp |   10.30006       3.209371
+                       e |   2.531672      1.591123
+                       u |   .7000389      .83668326
+
+        Tests:
+           Random Effects, Two Sided:
+           ALM(Var(u)=0)         =    6.50 Pr>chi2(1) =  0.0108
+
+           Random Effects, One Sided:
+           ALM(Var(u)=0)         =    2.55 Pr>N(0,1)  =  0.0054
+
+           Serial Correlation:
+           ALM(lambda=0)         =   12.77 Pr>chi2(1) =  0.0004
+
+           Joint Test:
+           LM(Var(u)=0,lambda=0) =   40.63 Pr>chi2(2) =  0.0000
+
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtserial growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year20
+> 15-year2020
+
+Wooldridge test for autocorrelation in panel data
+H0: no first order autocorrelation
+    F(  1,      41) =     10.120
+           Prob > F =      0.0028
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. qui xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2
+> 015-year2020, re
+
+. 
+. xtcsd, pesaran
+ 
+ 
+Pesaran's test of cross sectional independence =    -1.730, Pr = 0.0837
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. qui xtreg growth_gdp pol_stability inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year20
+> 15-year2020 i.country_id
+
+. 
+. xtcsd, pesaran
+ 
+ 
+Pesaran's test of cross sectional independence =    -1.727, Pr = 0.0841
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xi i.year i.country_id
+i.year            _Iyear_2014-2020    (naturally coded; _Iyear_2014 omitted)
+i.country_id      _Icountry_i_1-42    (naturally coded; _Icountry_i_1 omitted)
+
+. 
+. qui xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd _Iyear* _Ico
+> untry_i*
+
+. 
+. testparm _Iyear*
+
+ ( 1)  _Iyear_2015 = 0
+ ( 2)  _Iyear_2016 = 0
+ ( 3)  _Iyear_2017 = 0
+ ( 4)  _Iyear_2018 = 0
+ ( 5)  _Iyear_2019 = 0
+ ( 6)  _Iyear_2020 = 0
+
+           chi2(  6) =  504.37
+         Prob > chi2 =    0.0000
+
+. testparm _Icountry_i*
+
+ ( 1)  _Icountry_i_2 = 0
+ ( 2)  _Icountry_i_3 = 0
+ ( 3)  _Icountry_i_4 = 0
+ ( 4)  _Icountry_i_5 = 0
+ ( 5)  _Icountry_i_6 = 0
+ ( 6)  _Icountry_i_7 = 0
+ ( 7)  _Icountry_i_8 = 0
+ ( 8)  _Icountry_i_9 = 0
+ ( 9)  _Icountry_i_10 = 0
+ (10)  _Icountry_i_11 = 0
+ (11)  _Icountry_i_12 = 0
+ (12)  _Icountry_i_13 = 0
+ (13)  _Icountry_i_14 = 0
+ (14)  _Icountry_i_15 = 0
+ (15)  _Icountry_i_16 = 0
+ (16)  _Icountry_i_17 = 0
+ (17)  _Icountry_i_18 = 0
+ (18)  _Icountry_i_19 = 0
+ (19)  _Icountry_i_20 = 0
+ (20)  _Icountry_i_21 = 0
+ (21)  _Icountry_i_22 = 0
+ (22)  _Icountry_i_23 = 0
+ (23)  _Icountry_i_24 = 0
+ (24)  _Icountry_i_25 = 0
+ (25)  _Icountry_i_26 = 0
+ (26)  _Icountry_i_27 = 0
+ (27)  _Icountry_i_28 = 0
+ (28)  _Icountry_i_29 = 0
+ (29)  _Icountry_i_30 = 0
+ (30)  _Icountry_i_31 = 0
+ (31)  _Icountry_i_32 = 0
+ (32)  _Icountry_i_33 = 0
+ (33)  _Icountry_i_34 = 0
+ (34)  _Icountry_i_35 = 0
+ (35)  _Icountry_i_36 = 0
+ (36)  _Icountry_i_38 = 0
+ (37)  _Icountry_i_39 = 0
+ (38)  _Icountry_i_40 = 0
+
+           chi2( 38) =  116.68
+         Prob > chi2 =    0.0000
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtcsd, pesaran
+ 
+ 
+Pesaran's test of cross sectional independence =    -1.746, Pr = 0.0808
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. qui xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd _Iyear* _Ico
+> untry_i*
+
+. 
+. xtcsd, pesaran
+ 
+ 
+Pesaran's test of cross sectional independence =    -1.746, Pr = 0.0808
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. testparm _Iyear*
+
+ ( 1)  _Iyear_2015 = 0
+ ( 2)  _Iyear_2016 = 0
+ ( 3)  _Iyear_2017 = 0
+ ( 4)  _Iyear_2018 = 0
+ ( 5)  _Iyear_2019 = 0
+ ( 6)  _Iyear_2020 = 0
+
+           chi2(  6) =  504.37
+         Prob > chi2 =    0.0000
+
+. testparm _Icountry_i*
+
+ ( 1)  _Icountry_i_2 = 0
+ ( 2)  _Icountry_i_3 = 0
+ ( 3)  _Icountry_i_4 = 0
+ ( 4)  _Icountry_i_5 = 0
+ ( 5)  _Icountry_i_6 = 0
+ ( 6)  _Icountry_i_7 = 0
+ ( 7)  _Icountry_i_8 = 0
+ ( 8)  _Icountry_i_9 = 0
+ ( 9)  _Icountry_i_10 = 0
+ (10)  _Icountry_i_11 = 0
+ (11)  _Icountry_i_12 = 0
+ (12)  _Icountry_i_13 = 0
+ (13)  _Icountry_i_14 = 0
+ (14)  _Icountry_i_15 = 0
+ (15)  _Icountry_i_16 = 0
+ (16)  _Icountry_i_17 = 0
+ (17)  _Icountry_i_18 = 0
+ (18)  _Icountry_i_19 = 0
+ (19)  _Icountry_i_20 = 0
+ (20)  _Icountry_i_21 = 0
+ (21)  _Icountry_i_22 = 0
+ (22)  _Icountry_i_23 = 0
+ (23)  _Icountry_i_24 = 0
+ (24)  _Icountry_i_25 = 0
+ (25)  _Icountry_i_26 = 0
+ (26)  _Icountry_i_27 = 0
+ (27)  _Icountry_i_28 = 0
+ (28)  _Icountry_i_29 = 0
+ (29)  _Icountry_i_30 = 0
+ (30)  _Icountry_i_31 = 0
+ (31)  _Icountry_i_32 = 0
+ (32)  _Icountry_i_33 = 0
+ (33)  _Icountry_i_34 = 0
+ (34)  _Icountry_i_35 = 0
+ (35)  _Icountry_i_36 = 0
+ (36)  _Icountry_i_38 = 0
+ (37)  _Icountry_i_39 = 0
+ (38)  _Icountry_i_40 = 0
+
+           chi2( 38) =  116.68
+         Prob > chi2 =    0.0000
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xi i.year i.country
+i.year            _Iyear_2014-2020    (naturally coded; _Iyear_2014 omitted)
+i.country         _Icountry_1-42      (naturally coded; _Icountry_1 omitted)
+
+. 
+. qui xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd _Iyear* _Icountry_i*
+variable _Icountry_i* not found
+r(111);
+
+end of do-file
+
+r(111);
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. testparm _Iyear*
+
+ ( 1)  _Iyear_2015 = 0
+ ( 2)  _Iyear_2016 = 0
+ ( 3)  _Iyear_2017 = 0
+ ( 4)  _Iyear_2018 = 0
+ ( 5)  _Iyear_2019 = 0
+ ( 6)  _Iyear_2020 = 0
+
+           chi2(  6) =  504.37
+         Prob > chi2 =    0.0000
+
+. testparm _Icountry*
+no such variables;
+the specified varlist does not identify any testable coefficients
+r(111);
+
+end of do-file
+
+r(111);
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. testparm _Icountry_*
+no such variables;
+the specified varlist does not identify any testable coefficients
+r(111);
+
+end of do-file
+
+r(111);
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. qui xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd _Iyear* _Icountry_*
+
+. 
+. xtcsd, pesaran
+ 
+ 
+Pesaran's test of cross sectional independence =    -1.746, Pr = 0.0808
+
+. 
+. testparm _Iyear*
+
+ ( 1)  _Iyear_2015 = 0
+ ( 2)  _Iyear_2016 = 0
+ ( 3)  _Iyear_2017 = 0
+ ( 4)  _Iyear_2018 = 0
+ ( 5)  _Iyear_2019 = 0
+ ( 6)  _Iyear_2020 = 0
+
+           chi2(  6) =  504.37
+         Prob > chi2 =    0.0000
+
+. testparm _Icountry_*
+
+ ( 1)  _Icountry_2 = 0
+ ( 2)  _Icountry_3 = 0
+ ( 3)  _Icountry_4 = 0
+ ( 4)  _Icountry_5 = 0
+ ( 5)  _Icountry_6 = 0
+ ( 6)  _Icountry_7 = 0
+ ( 7)  _Icountry_8 = 0
+ ( 8)  _Icountry_9 = 0
+ ( 9)  _Icountry_10 = 0
+ (10)  _Icountry_11 = 0
+ (11)  _Icountry_12 = 0
+ (12)  _Icountry_13 = 0
+ (13)  _Icountry_14 = 0
+ (14)  _Icountry_15 = 0
+ (15)  _Icountry_16 = 0
+ (16)  _Icountry_17 = 0
+ (17)  _Icountry_18 = 0
+ (18)  _Icountry_19 = 0
+ (19)  _Icountry_20 = 0
+ (20)  _Icountry_21 = 0
+ (21)  _Icountry_22 = 0
+ (22)  _Icountry_23 = 0
+ (23)  _Icountry_24 = 0
+ (24)  _Icountry_25 = 0
+ (25)  _Icountry_26 = 0
+ (26)  _Icountry_27 = 0
+ (27)  _Icountry_28 = 0
+ (28)  _Icountry_29 = 0
+ (29)  _Icountry_30 = 0
+ (30)  _Icountry_31 = 0
+ (31)  _Icountry_32 = 0
+ (32)  _Icountry_33 = 0
+ (33)  _Icountry_34 = 0
+ (34)  _Icountry_35 = 0
+ (35)  _Icountry_36 = 0
+ (36)  _Icountry_38 = 0
+ (37)  _Icountry_39 = 0
+ (38)  _Icountry_40 = 0
+
+           chi2( 38) =  116.68
+         Prob > chi2 =    0.0000
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. qui xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2015-year2020, fe
+
+. xttest3
+
+Modified Wald test for groupwise heteroskedasticity
+in fixed effect regression model
+
+H0: sigma(i)^2 = sigma^2 for all i
+
+chi2 (42)  =   14782.51
+Prob>chi2 =      0.0000
+
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. qui xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2015-year2020, re
+
+. xttest3
+last estimates not xtreg, fe
+r(301);
+
+end of do-file
+
+r(301);
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. qui xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2015-year2020, fe
+
+. xttest3
+
+Modified Wald test for groupwise heteroskedasticity
+in fixed effect regression model
+
+H0: sigma(i)^2 = sigma^2 for all i
+
+chi2 (42)  =   14782.51
+Prob>chi2 =      0.0000
+
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. qui xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2015-year2020 i.country_id,fe
+
+. 
+. xttest3
+
+Modified Wald test for groupwise heteroskedasticity
+in fixed effect regression model
+
+H0: sigma(i)^2 = sigma^2 for all i
+
+chi2 (42)  =   14782.51
+Prob>chi2 =      0.0000
+
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. hausman fe_t re_t
+
+                 ---- Coefficients ----
+             |      (b)          (B)            (b-B)     sqrt(diag(V_b-V_B))
+             |      fe_t         re_t        Difference          S.E.
+-------------+----------------------------------------------------------------
+ rule_of_law |    .7895882     .0747966        .7147916        1.123913
+   inflation |   -.0487011     .0318037       -.0805048        .0333746
+  startbusin |    .0713063     .0406703         .030636        .0473562
+       urban |    -.314261    -.0601371       -.2541239        .2651195
+   log_unemp |   -.2156051    -.4823557        .2667506        .5033524
+    year2015 |   -.1657316    -.1763034        .0105718         .056419
+    year2016 |   -.1960046    -.2944394        .0984348        .1107724
+    year2017 |    .7950483     .5455205        .2495278        .1943338
+    year2018 |    .7411384     .4013681        .3397704        .2698004
+    year2019 |    .0334953     -.297909        .3314042        .3298351
+    year2020 |   -6.617035    -6.906603        .2895675        .3649102
+------------------------------------------------------------------------------
+                           b = consistent under Ho and Ha; obtained from xtreg
+            B = inconsistent under Ha, efficient under Ho; obtained from xtreg
+
+    Test:  Ho:  difference in coefficients not systematic
+
+                 chi2(11) = (b-B)'[(V_b-V_B)^(-1)](b-B)
+                          =       11.57
+                Prob>chi2 =      0.3972
+                (V_b-V_B is not positive definite)
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtpcse growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2015-year2020, correlation(ar1) 
+(note: estimates of rho outside [-1,1] bounded to be in the range [-1,1])
+
+Prais-Winsten regression, correlated panels corrected standard errors (PCSEs)
+
+Group variable:   country_id                    Number of obs     =        294
+Time variable:    year                          Number of groups  =         42
+Panels:           correlated (balanced)         Obs per group:
+Autocorrelation:  common AR(1)                                min =          7
+                                                              avg =          7
+                                                              max =          7
+Estimated covariances      =       903          R-squared         =     0.7116
+Estimated autocorrelations =         1          Wald chi2(8)      =   65443.80
+Estimated coefficients     =        15          Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+             |           Panel-corrected
+  growth_gdp |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .1232181   .2245117     0.55   0.583    -.3168167    .5632528
+   inflation |   .0803882   .0603212     1.33   0.183    -.0378391    .1986155
+  startbusin |    .030561   .0170002     1.80   0.072    -.0027588    .0638807
+       urban |  -.0520534   .0130495    -3.99   0.000    -.0776299   -.0264769
+   log_unemp |  -.6079735   .2619459    -2.32   0.020    -1.121378    -.094569
+   schooling |  -.2411698   .1195086    -2.02   0.044    -.4754025   -.0069372
+    dummy_eu |   .3159981   .3934688     0.80   0.422    -.4551865    1.087183
+  dummy_oecd |   .3679969   .2720097     1.35   0.176    -.1651324    .9011262
+    year2015 |   -.137873   .0457331    -3.01   0.003    -.2275082   -.0482378
+    year2016 |  -.2833969   .0222978   -12.71   0.000    -.3270998    -.239694
+    year2017 |   .5101258   .0716695     7.12   0.000     .3696562    .6505954
+    year2018 |    .350733   .0999372     3.51   0.000     .1548596    .5466064
+    year2019 |  -.3192104   .0951053    -3.36   0.001    -.5056133   -.1328075
+    year2020 |  -6.866202   .0647561  -106.03   0.000    -6.993122   -6.739283
+       _cons |   6.052244   1.786073     3.39   0.001     2.551605    9.552882
+-------------+----------------------------------------------------------------
+         rho |   .3839673
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtpcse growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2015-year2020, correlation(psar1) 
+(note: estimates of rho outside [-1,1] bounded to be in the range [-1,1])
+
+Prais-Winsten regression, correlated panels corrected standard errors (PCSEs)
+
+Group variable:   country_id                    Number of obs     =        294
+Time variable:    year                          Number of groups  =         42
+Panels:           correlated (balanced)         Obs per group:
+Autocorrelation:  panel-specific AR(1)                        min =          7
+                                                              avg =          7
+                                                              max =          7
+Estimated covariances      =       903          R-squared         =     0.7594
+Estimated autocorrelations =        42          Wald chi2(14)     =    7163.62
+Estimated coefficients     =        15          Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+             |           Panel-corrected
+  growth_gdp |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .0212452   .2384372     0.09   0.929    -.4460831    .4885735
+   inflation |   .1203491   .0571489     2.11   0.035     .0083394    .2323588
+  startbusin |   .0331758    .022018     1.51   0.132    -.0099787    .0763302
+       urban |  -.0602765   .0138884    -4.34   0.000    -.0874973   -.0330556
+   log_unemp |   -.538901   .2412862    -2.23   0.026    -1.011813   -.0659887
+   schooling |  -.1746432    .093862    -1.86   0.063    -.3586094    .0093229
+    dummy_eu |   .3412866   .2474971     1.38   0.168    -.1437987    .8263719
+  dummy_oecd |   .1715887   .2596197     0.66   0.509    -.3372565    .6804339
+    year2015 |  -.0926789   .1257563    -0.74   0.461    -.3391568     .153799
+    year2016 |   -.393652   .1536998    -2.56   0.010     -.694898   -.0924059
+    year2017 |   .3594916   .1793696     2.00   0.045     .0079335    .7110496
+    year2018 |   .1028829   .1958259     0.53   0.599    -.2809288    .4866946
+    year2019 |  -.3431997   .1942471    -1.77   0.077    -.7239169    .0375175
+    year2020 |  -7.031828   .1723536   -40.80   0.000    -7.369635   -6.694021
+       _cons |   5.866789   2.879887     2.04   0.042     .2223145    11.51126
+------------------------------------------------------------------------------
+        rhos = -.4017809  .4117654  .5691581  .8508144  .8404914 ... -.4740204
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xttest1
+last estimates not found
+r(301);
+
+end of do-file
+
+r(301);
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. qui xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2015-year2020, re
+
+. 
+. xttest1
+
+Tests for the error component model:
+
+        growth_gdp[country_id,t] = Xb + u[country_id] + v[country_id,t]
+           v[country_id,t] = lambda v[country_id,(t-1)] + e[country_id,t]
+
+        Estimated results:
+                         |       Var     sd = sqrt(Var)
+                ---------+-----------------------------
+               growth_gdp |   10.30006       3.209371
+                       e |   2.531672      1.591123
+                       u |   .7000389      .83668326
+
+        Tests:
+           Random Effects, Two Sided:
+           ALM(Var(u)=0)         =    6.50 Pr>chi2(1) =  0.0108
+
+           Random Effects, One Sided:
+           ALM(Var(u)=0)         =    2.55 Pr>N(0,1)  =  0.0054
+
+           Serial Correlation:
+           ALM(lambda=0)         =   12.77 Pr>chi2(1) =  0.0004
+
+           Joint Test:
+           LM(Var(u)=0,lambda=0) =   40.63 Pr>chi2(2) =  0.0000
+
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtregar growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2015-year2020, re
+
+RE GLS regression with AR(1) disturbances       Number of obs     =        294
+Group variable: country_id                      Number of groups  =         42
+
+R-sq:                                           Obs per group:
+     within  = 0.7383                                         min =          7
+     between = 0.5472                                         avg =        7.0
+     overall = 0.6980                                         max =          7
+
+                                                Wald chi2(15)     =     701.11
+corr(u_i, Xb)      = 0 (assumed)                Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+  growth_gdp |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .1085627   .3078755     0.35   0.724    -.4948621    .7119876
+   inflation |   .0638591    .047965     1.33   0.183    -.0301505    .1578688
+  startbusin |   .0326358    .025743     1.27   0.205    -.0178195    .0830912
+       urban |  -.0537722   .0176899    -3.04   0.002    -.0884437   -.0191007
+   log_unemp |  -.5697704   .2627675    -2.17   0.030    -1.084785   -.0547556
+   schooling |  -.2263129   .1620014    -1.40   0.162    -.5438298    .0912039
+    dummy_eu |   .3225535   .3949905     0.82   0.414    -.4516137    1.096721
+  dummy_oecd |   .3366971   .4351304     0.77   0.439    -.5161428    1.189537
+    year2015 |  -.1504699   .3139447    -0.48   0.632    -.7657902    .4648504
+    year2016 |  -.2863198   .3585938    -0.80   0.425    -.9891508    .4165111
+    year2017 |   .5232697   .3771227     1.39   0.165    -.2158772    1.262417
+    year2018 |   .3687388   .3866379     0.95   0.340    -.3890576    1.126535
+    year2019 |  -.3103654   .3910833    -0.79   0.427    -1.076875    .4561438
+    year2020 |  -6.877101   .3898765   -17.64   0.000    -7.641245   -6.112957
+       _cons |   5.845839   2.809693     2.08   0.037     .3389413    11.35274
+-------------+----------------------------------------------------------------
+      rho_ar |  .31665584   (estimated autocorrelation coefficient)
+     sigma_u |  .52719132
+     sigma_e |  1.5939424
+     rho_fov |  .09860652   (fraction of variance due to u_i)
+       theta |  .15632632
+------------------------------------------------------------------------------
+
+. est store regar_re
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtpcse growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2015-year2020, correlation(ar1) 
+(note: estimates of rho outside [-1,1] bounded to be in the range [-1,1])
+
+Prais-Winsten regression, correlated panels corrected standard errors (PCSEs)
+
+Group variable:   country_id                    Number of obs     =        294
+Time variable:    year                          Number of groups  =         42
+Panels:           correlated (balanced)         Obs per group:
+Autocorrelation:  common AR(1)                                min =          7
+                                                              avg =          7
+                                                              max =          7
+Estimated covariances      =       903          R-squared         =     0.7116
+Estimated autocorrelations =         1          Wald chi2(8)      =   65443.80
+Estimated coefficients     =        15          Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+             |           Panel-corrected
+  growth_gdp |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .1232181   .2245117     0.55   0.583    -.3168167    .5632528
+   inflation |   .0803882   .0603212     1.33   0.183    -.0378391    .1986155
+  startbusin |    .030561   .0170002     1.80   0.072    -.0027588    .0638807
+       urban |  -.0520534   .0130495    -3.99   0.000    -.0776299   -.0264769
+   log_unemp |  -.6079735   .2619459    -2.32   0.020    -1.121378    -.094569
+   schooling |  -.2411698   .1195086    -2.02   0.044    -.4754025   -.0069372
+    dummy_eu |   .3159981   .3934688     0.80   0.422    -.4551865    1.087183
+  dummy_oecd |   .3679969   .2720097     1.35   0.176    -.1651324    .9011262
+    year2015 |   -.137873   .0457331    -3.01   0.003    -.2275082   -.0482378
+    year2016 |  -.2833969   .0222978   -12.71   0.000    -.3270998    -.239694
+    year2017 |   .5101258   .0716695     7.12   0.000     .3696562    .6505954
+    year2018 |    .350733   .0999372     3.51   0.000     .1548596    .5466064
+    year2019 |  -.3192104   .0951053    -3.36   0.001    -.5056133   -.1328075
+    year2020 |  -6.866202   .0647561  -106.03   0.000    -6.993122   -6.739283
+       _cons |   6.052244   1.786073     3.39   0.001     2.551605    9.552882
+-------------+----------------------------------------------------------------
+         rho |   .3839673
+------------------------------------------------------------------------------
+
+. est store pcar
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtpcse growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2015-year2020, correlation(psar1) 
+(note: estimates of rho outside [-1,1] bounded to be in the range [-1,1])
+
+Prais-Winsten regression, correlated panels corrected standard errors (PCSEs)
+
+Group variable:   country_id                    Number of obs     =        294
+Time variable:    year                          Number of groups  =         42
+Panels:           correlated (balanced)         Obs per group:
+Autocorrelation:  panel-specific AR(1)                        min =          7
+                                                              avg =          7
+                                                              max =          7
+Estimated covariances      =       903          R-squared         =     0.7594
+Estimated autocorrelations =        42          Wald chi2(14)     =    7163.62
+Estimated coefficients     =        15          Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+             |           Panel-corrected
+  growth_gdp |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .0212452   .2384372     0.09   0.929    -.4460831    .4885735
+   inflation |   .1203491   .0571489     2.11   0.035     .0083394    .2323588
+  startbusin |   .0331758    .022018     1.51   0.132    -.0099787    .0763302
+       urban |  -.0602765   .0138884    -4.34   0.000    -.0874973   -.0330556
+   log_unemp |   -.538901   .2412862    -2.23   0.026    -1.011813   -.0659887
+   schooling |  -.1746432    .093862    -1.86   0.063    -.3586094    .0093229
+    dummy_eu |   .3412866   .2474971     1.38   0.168    -.1437987    .8263719
+  dummy_oecd |   .1715887   .2596197     0.66   0.509    -.3372565    .6804339
+    year2015 |  -.0926789   .1257563    -0.74   0.461    -.3391568     .153799
+    year2016 |   -.393652   .1536998    -2.56   0.010     -.694898   -.0924059
+    year2017 |   .3594916   .1793696     2.00   0.045     .0079335    .7110496
+    year2018 |   .1028829   .1958259     0.53   0.599    -.2809288    .4866946
+    year2019 |  -.3431997   .1942471    -1.77   0.077    -.7239169    .0375175
+    year2020 |  -7.031828   .1723536   -40.80   0.000    -7.369635   -6.694021
+       _cons |   5.866789   2.879887     2.04   0.042     .2223145    11.51126
+------------------------------------------------------------------------------
+        rhos = -.4017809  .4117654  .5691581  .8508144  .8404914 ... -.4740204
+------------------------------------------------------------------------------
+
+. est store pcpsar
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2020, re
+
+Random-effects GLS regression                   Number of obs     =        294
+Group variable: country_id                      Number of groups  =         42
+
+R-sq:                                           Obs per group:
+     within  = 0.7282                                         min =          7
+     between = 0.5425                                         avg =        7.0
+     overall = 0.6897                                         max =          7
+
+                                                Wald chi2(9)      =     703.85
+corr(u_i, X)   = 0 (assumed)                    Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+  growth_gdp |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .0544322   .3064073     0.18   0.859     -.546115    .6549794
+   inflation |   .0603543   .0472499     1.28   0.201    -.0322538    .1529625
+  startbusin |   .0411322   .0248444     1.66   0.098    -.0075619    .0898263
+       urban |  -.0587175   .0178475    -3.29   0.001     -.093698    -.023737
+   log_unemp |  -.5503452   .2501818    -2.20   0.028    -1.040693   -.0599979
+   schooling |  -.2035451   .1645112    -1.24   0.216    -.5259813     .118891
+    dummy_eu |   .4626505   .3996315     1.16   0.247    -.3206129    1.245914
+  dummy_oecd |   .2919518   .4440343     0.66   0.511    -.5783394    1.162243
+    year2020 |  -6.918537   .2785434   -24.84   0.000    -7.464472   -6.372602
+       _cons |   5.233325   2.774664     1.89   0.059    -.2049157    10.67157
+-------------+----------------------------------------------------------------
+     sigma_u |  .82906681
+     sigma_e |  1.6187903
+         rho |  .20779513   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2015-year2020, re robust
+
+Random-effects GLS regression                   Number of obs     =        294
+Group variable: country_id                      Number of groups  =         42
+
+R-sq:                                           Obs per group:
+     within  = 0.7410                                         min =          7
+     between = 0.5231                                         avg =        7.0
+     overall = 0.6960                                         max =          7
+
+                                                Wald chi2(14)     =     380.43
+corr(u_i, X)   = 0 (assumed)                    Prob > chi2       =     0.0000
+
+                            (Std. Err. adjusted for 42 clusters in country_id)
+------------------------------------------------------------------------------
+             |               Robust
+  growth_gdp |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .0747966   .3078369     0.24   0.808    -.5285526    .6781458
+   inflation |   .0318037   .0707797     0.45   0.653    -.1069219    .1705293
+  startbusin |   .0406703    .030087     1.35   0.176    -.0182991    .0996397
+       urban |  -.0601371   .0177757    -3.38   0.001    -.0949768   -.0252973
+   log_unemp |  -.4823557   .3474004    -1.39   0.165    -1.163248    .1985365
+   schooling |  -.1838312   .1509031    -1.22   0.223    -.4795959    .1119335
+    dummy_eu |   .3908539   .4434631     0.88   0.378    -.4783179    1.260026
+  dummy_oecd |   .2483221   .4110428     0.60   0.546    -.5573069    1.053951
+    year2015 |  -.1763034   .3041927    -0.58   0.562    -.7725101    .4199032
+    year2016 |  -.2944394   .3505857    -0.84   0.401    -.9815747    .3926958
+    year2017 |   .5455205   .3137207     1.74   0.082    -.0693607    1.160402
+    year2018 |   .4013681     .33991     1.18   0.238    -.2648433    1.067579
+    year2019 |   -.297909   .3646063    -0.82   0.414    -1.012524    .4167063
+    year2020 |  -6.906603   .5378348   -12.84   0.000    -7.960739   -5.852466
+       _cons |    5.15149   3.007622     1.71   0.087    -.7433409    11.04632
+-------------+----------------------------------------------------------------
+     sigma_u |  .83668326
+     sigma_e |   1.591123
+         rho |  .21661555   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. 
+. xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2015-year2020, re
+
+Random-effects GLS regression                   Number of obs     =        294
+Group variable: country_id                      Number of groups  =         42
+
+R-sq:                                           Obs per group:
+     within  = 0.7410                                         min =          7
+     between = 0.5231                                         avg =        7.0
+     overall = 0.6960                                         max =          7
+
+                                                Wald chi2(14)     =     729.07
+corr(u_i, X)   = 0 (assumed)                    Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+  growth_gdp |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .0747966   .3138204     0.24   0.812      -.54028    .6898732
+   inflation |   .0318037   .0482424     0.66   0.510    -.0627497     .126357
+  startbusin |   .0406703   .0254658     1.60   0.110    -.0092417    .0905823
+       urban |  -.0601371    .018058    -3.33   0.001      -.09553   -.0247441
+   log_unemp |  -.4823557    .261268    -1.85   0.065    -.9944316    .0297201
+   schooling |  -.1838312   .1654248    -1.11   0.266    -.5080577    .1403954
+    dummy_eu |   .3908539   .4059892     0.96   0.336    -.4048704    1.186578
+  dummy_oecd |   .2483221   .4464681     0.56   0.578    -.6267392    1.123384
+    year2015 |  -.1763034   .3535446    -0.50   0.618    -.8692381    .5166312
+    year2016 |  -.2944394   .3526628    -0.83   0.404    -.9856458    .3967669
+    year2017 |   .5455205   .3581855     1.52   0.128    -.1565101    1.247551
+    year2018 |   .4013681   .3639478     1.10   0.270    -.3119564    1.114693
+    year2019 |   -.297909   .3674515    -0.81   0.418    -1.018101    .4222828
+    year2020 |  -6.906603   .3656863   -18.89   0.000    -7.623335    -6.18987
+       _cons |    5.15149   2.799705     1.84   0.066    -.3358307    10.63881
+-------------+----------------------------------------------------------------
+     sigma_u |  .83668326
+     sigma_e |   1.591123
+         rho |  .21661555   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. 
+. xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2015-year2020, re robust
+
+Random-effects GLS regression                   Number of obs     =        294
+Group variable: country_id                      Number of groups  =         42
+
+R-sq:                                           Obs per group:
+     within  = 0.7410                                         min =          7
+     between = 0.5231                                         avg =        7.0
+     overall = 0.6960                                         max =          7
+
+                                                Wald chi2(14)     =     380.43
+corr(u_i, X)   = 0 (assumed)                    Prob > chi2       =     0.0000
+
+                            (Std. Err. adjusted for 42 clusters in country_id)
+------------------------------------------------------------------------------
+             |               Robust
+  growth_gdp |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .0747966   .3078369     0.24   0.808    -.5285526    .6781458
+   inflation |   .0318037   .0707797     0.45   0.653    -.1069219    .1705293
+  startbusin |   .0406703    .030087     1.35   0.176    -.0182991    .0996397
+       urban |  -.0601371   .0177757    -3.38   0.001    -.0949768   -.0252973
+   log_unemp |  -.4823557   .3474004    -1.39   0.165    -1.163248    .1985365
+   schooling |  -.1838312   .1509031    -1.22   0.223    -.4795959    .1119335
+    dummy_eu |   .3908539   .4434631     0.88   0.378    -.4783179    1.260026
+  dummy_oecd |   .2483221   .4110428     0.60   0.546    -.5573069    1.053951
+    year2015 |  -.1763034   .3041927    -0.58   0.562    -.7725101    .4199032
+    year2016 |  -.2944394   .3505857    -0.84   0.401    -.9815747    .3926958
+    year2017 |   .5455205   .3137207     1.74   0.082    -.0693607    1.160402
+    year2018 |   .4013681     .33991     1.18   0.238    -.2648433    1.067579
+    year2019 |   -.297909   .3646063    -0.82   0.414    -1.012524    .4167063
+    year2020 |  -6.906603   .5378348   -12.84   0.000    -7.960739   -5.852466
+       _cons |    5.15149   3.007622     1.71   0.087    -.7433409    11.04632
+-------------+----------------------------------------------------------------
+     sigma_u |  .83668326
+     sigma_e |   1.591123
+         rho |  .21661555   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtregar growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2015-year2020, re
+
+RE GLS regression with AR(1) disturbances       Number of obs     =        294
+Group variable: country_id                      Number of groups  =         42
+
+R-sq:                                           Obs per group:
+     within  = 0.7383                                         min =          7
+     between = 0.5472                                         avg =        7.0
+     overall = 0.6980                                         max =          7
+
+                                                Wald chi2(15)     =     701.11
+corr(u_i, Xb)      = 0 (assumed)                Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+  growth_gdp |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .1085627   .3078755     0.35   0.724    -.4948621    .7119876
+   inflation |   .0638591    .047965     1.33   0.183    -.0301505    .1578688
+  startbusin |   .0326358    .025743     1.27   0.205    -.0178195    .0830912
+       urban |  -.0537722   .0176899    -3.04   0.002    -.0884437   -.0191007
+   log_unemp |  -.5697704   .2627675    -2.17   0.030    -1.084785   -.0547556
+   schooling |  -.2263129   .1620014    -1.40   0.162    -.5438298    .0912039
+    dummy_eu |   .3225535   .3949905     0.82   0.414    -.4516137    1.096721
+  dummy_oecd |   .3366971   .4351304     0.77   0.439    -.5161428    1.189537
+    year2015 |  -.1504699   .3139447    -0.48   0.632    -.7657902    .4648504
+    year2016 |  -.2863198   .3585938    -0.80   0.425    -.9891508    .4165111
+    year2017 |   .5232697   .3771227     1.39   0.165    -.2158772    1.262417
+    year2018 |   .3687388   .3866379     0.95   0.340    -.3890576    1.126535
+    year2019 |  -.3103654   .3910833    -0.79   0.427    -1.076875    .4561438
+    year2020 |  -6.877101   .3898765   -17.64   0.000    -7.641245   -6.112957
+       _cons |   5.845839   2.809693     2.08   0.037     .3389413    11.35274
+-------------+----------------------------------------------------------------
+      rho_ar |  .31665584   (estimated autocorrelation coefficient)
+     sigma_u |  .52719132
+     sigma_e |  1.5939424
+     rho_fov |  .09860652   (fraction of variance due to u_i)
+       theta |  .15632632
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtregar growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2015-year2020, re
+
+RE GLS regression with AR(1) disturbances       Number of obs     =        294
+Group variable: country_id                      Number of groups  =         42
+
+R-sq:                                           Obs per group:
+     within  = 0.7383                                         min =          7
+     between = 0.5472                                         avg =        7.0
+     overall = 0.6980                                         max =          7
+
+                                                Wald chi2(15)     =     701.11
+corr(u_i, Xb)      = 0 (assumed)                Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+  growth_gdp |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .1085627   .3078755     0.35   0.724    -.4948621    .7119876
+   inflation |   .0638591    .047965     1.33   0.183    -.0301505    .1578688
+  startbusin |   .0326358    .025743     1.27   0.205    -.0178195    .0830912
+       urban |  -.0537722   .0176899    -3.04   0.002    -.0884437   -.0191007
+   log_unemp |  -.5697704   .2627675    -2.17   0.030    -1.084785   -.0547556
+   schooling |  -.2263129   .1620014    -1.40   0.162    -.5438298    .0912039
+    dummy_eu |   .3225535   .3949905     0.82   0.414    -.4516137    1.096721
+  dummy_oecd |   .3366971   .4351304     0.77   0.439    -.5161428    1.189537
+    year2015 |  -.1504699   .3139447    -0.48   0.632    -.7657902    .4648504
+    year2016 |  -.2863198   .3585938    -0.80   0.425    -.9891508    .4165111
+    year2017 |   .5232697   .3771227     1.39   0.165    -.2158772    1.262417
+    year2018 |   .3687388   .3866379     0.95   0.340    -.3890576    1.126535
+    year2019 |  -.3103654   .3910833    -0.79   0.427    -1.076875    .4561438
+    year2020 |  -6.877101   .3898765   -17.64   0.000    -7.641245   -6.112957
+       _cons |   5.845839   2.809693     2.08   0.037     .3389413    11.35274
+-------------+----------------------------------------------------------------
+      rho_ar |  .31665584   (estimated autocorrelation coefficient)
+     sigma_u |  .52719132
+     sigma_e |  1.5939424
+     rho_fov |  .09860652   (fraction of variance due to u_i)
+       theta |  .15632632
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2015-year2020, re robust
+
+Random-effects GLS regression                   Number of obs     =        294
+Group variable: country_id                      Number of groups  =         42
+
+R-sq:                                           Obs per group:
+     within  = 0.7410                                         min =          7
+     between = 0.5231                                         avg =        7.0
+     overall = 0.6960                                         max =          7
+
+                                                Wald chi2(14)     =     380.43
+corr(u_i, X)   = 0 (assumed)                    Prob > chi2       =     0.0000
+
+                            (Std. Err. adjusted for 42 clusters in country_id)
+------------------------------------------------------------------------------
+             |               Robust
+  growth_gdp |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .0747966   .3078369     0.24   0.808    -.5285526    .6781458
+   inflation |   .0318037   .0707797     0.45   0.653    -.1069219    .1705293
+  startbusin |   .0406703    .030087     1.35   0.176    -.0182991    .0996397
+       urban |  -.0601371   .0177757    -3.38   0.001    -.0949768   -.0252973
+   log_unemp |  -.4823557   .3474004    -1.39   0.165    -1.163248    .1985365
+   schooling |  -.1838312   .1509031    -1.22   0.223    -.4795959    .1119335
+    dummy_eu |   .3908539   .4434631     0.88   0.378    -.4783179    1.260026
+  dummy_oecd |   .2483221   .4110428     0.60   0.546    -.5573069    1.053951
+    year2015 |  -.1763034   .3041927    -0.58   0.562    -.7725101    .4199032
+    year2016 |  -.2944394   .3505857    -0.84   0.401    -.9815747    .3926958
+    year2017 |   .5455205   .3137207     1.74   0.082    -.0693607    1.160402
+    year2018 |   .4013681     .33991     1.18   0.238    -.2648433    1.067579
+    year2019 |   -.297909   .3646063    -0.82   0.414    -1.012524    .4167063
+    year2020 |  -6.906603   .5378348   -12.84   0.000    -7.960739   -5.852466
+       _cons |    5.15149   3.007622     1.71   0.087    -.7433409    11.04632
+-------------+----------------------------------------------------------------
+     sigma_u |  .83668326
+     sigma_e |   1.591123
+         rho |  .21661555   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtpcse growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2015-year2020, correlation(psar1) 
+(note: estimates of rho outside [-1,1] bounded to be in the range [-1,1])
+
+Prais-Winsten regression, correlated panels corrected standard errors (PCSEs)
+
+Group variable:   country_id                    Number of obs     =        294
+Time variable:    year                          Number of groups  =         42
+Panels:           correlated (balanced)         Obs per group:
+Autocorrelation:  panel-specific AR(1)                        min =          7
+                                                              avg =          7
+                                                              max =          7
+Estimated covariances      =       903          R-squared         =     0.7594
+Estimated autocorrelations =        42          Wald chi2(14)     =    7163.62
+Estimated coefficients     =        15          Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+             |           Panel-corrected
+  growth_gdp |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .0212452   .2384372     0.09   0.929    -.4460831    .4885735
+   inflation |   .1203491   .0571489     2.11   0.035     .0083394    .2323588
+  startbusin |   .0331758    .022018     1.51   0.132    -.0099787    .0763302
+       urban |  -.0602765   .0138884    -4.34   0.000    -.0874973   -.0330556
+   log_unemp |   -.538901   .2412862    -2.23   0.026    -1.011813   -.0659887
+   schooling |  -.1746432    .093862    -1.86   0.063    -.3586094    .0093229
+    dummy_eu |   .3412866   .2474971     1.38   0.168    -.1437987    .8263719
+  dummy_oecd |   .1715887   .2596197     0.66   0.509    -.3372565    .6804339
+    year2015 |  -.0926789   .1257563    -0.74   0.461    -.3391568     .153799
+    year2016 |   -.393652   .1536998    -2.56   0.010     -.694898   -.0924059
+    year2017 |   .3594916   .1793696     2.00   0.045     .0079335    .7110496
+    year2018 |   .1028829   .1958259     0.53   0.599    -.2809288    .4866946
+    year2019 |  -.3431997   .1942471    -1.77   0.077    -.7239169    .0375175
+    year2020 |  -7.031828   .1723536   -40.80   0.000    -7.369635   -6.694021
+       _cons |   5.866789   2.879887     2.04   0.042     .2223145    11.51126
+------------------------------------------------------------------------------
+        rhos = -.4017809  .4117654  .5691581  .8508144  .8404914 ... -.4740204
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtpcse growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2015-year2020, correlation(ar1) 
+(note: estimates of rho outside [-1,1] bounded to be in the range [-1,1])
+
+Prais-Winsten regression, correlated panels corrected standard errors (PCSEs)
+
+Group variable:   country_id                    Number of obs     =        294
+Time variable:    year                          Number of groups  =         42
+Panels:           correlated (balanced)         Obs per group:
+Autocorrelation:  common AR(1)                                min =          7
+                                                              avg =          7
+                                                              max =          7
+Estimated covariances      =       903          R-squared         =     0.7116
+Estimated autocorrelations =         1          Wald chi2(8)      =   65443.80
+Estimated coefficients     =        15          Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+             |           Panel-corrected
+  growth_gdp |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .1232181   .2245117     0.55   0.583    -.3168167    .5632528
+   inflation |   .0803882   .0603212     1.33   0.183    -.0378391    .1986155
+  startbusin |    .030561   .0170002     1.80   0.072    -.0027588    .0638807
+       urban |  -.0520534   .0130495    -3.99   0.000    -.0776299   -.0264769
+   log_unemp |  -.6079735   .2619459    -2.32   0.020    -1.121378    -.094569
+   schooling |  -.2411698   .1195086    -2.02   0.044    -.4754025   -.0069372
+    dummy_eu |   .3159981   .3934688     0.80   0.422    -.4551865    1.087183
+  dummy_oecd |   .3679969   .2720097     1.35   0.176    -.1651324    .9011262
+    year2015 |   -.137873   .0457331    -3.01   0.003    -.2275082   -.0482378
+    year2016 |  -.2833969   .0222978   -12.71   0.000    -.3270998    -.239694
+    year2017 |   .5101258   .0716695     7.12   0.000     .3696562    .6505954
+    year2018 |    .350733   .0999372     3.51   0.000     .1548596    .5466064
+    year2019 |  -.3192104   .0951053    -3.36   0.001    -.5056133   -.1328075
+    year2020 |  -6.866202   .0647561  -106.03   0.000    -6.993122   -6.739283
+       _cons |   6.052244   1.786073     3.39   0.001     2.551605    9.552882
+-------------+----------------------------------------------------------------
+         rho |   .3839673
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtpcse growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2015-year2020, correlation(psar1) 
+(note: estimates of rho outside [-1,1] bounded to be in the range [-1,1])
+
+Prais-Winsten regression, correlated panels corrected standard errors (PCSEs)
+
+Group variable:   country_id                    Number of obs     =        294
+Time variable:    year                          Number of groups  =         42
+Panels:           correlated (balanced)         Obs per group:
+Autocorrelation:  panel-specific AR(1)                        min =          7
+                                                              avg =          7
+                                                              max =          7
+Estimated covariances      =       903          R-squared         =     0.7594
+Estimated autocorrelations =        42          Wald chi2(14)     =    7163.62
+Estimated coefficients     =        15          Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+             |           Panel-corrected
+  growth_gdp |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .0212452   .2384372     0.09   0.929    -.4460831    .4885735
+   inflation |   .1203491   .0571489     2.11   0.035     .0083394    .2323588
+  startbusin |   .0331758    .022018     1.51   0.132    -.0099787    .0763302
+       urban |  -.0602765   .0138884    -4.34   0.000    -.0874973   -.0330556
+   log_unemp |   -.538901   .2412862    -2.23   0.026    -1.011813   -.0659887
+   schooling |  -.1746432    .093862    -1.86   0.063    -.3586094    .0093229
+    dummy_eu |   .3412866   .2474971     1.38   0.168    -.1437987    .8263719
+  dummy_oecd |   .1715887   .2596197     0.66   0.509    -.3372565    .6804339
+    year2015 |  -.0926789   .1257563    -0.74   0.461    -.3391568     .153799
+    year2016 |   -.393652   .1536998    -2.56   0.010     -.694898   -.0924059
+    year2017 |   .3594916   .1793696     2.00   0.045     .0079335    .7110496
+    year2018 |   .1028829   .1958259     0.53   0.599    -.2809288    .4866946
+    year2019 |  -.3431997   .1942471    -1.77   0.077    -.7239169    .0375175
+    year2020 |  -7.031828   .1723536   -40.80   0.000    -7.369635   -6.694021
+       _cons |   5.866789   2.879887     2.04   0.042     .2223145    11.51126
+------------------------------------------------------------------------------
+        rhos = -.4017809  .4117654  .5691581  .8508144  .8404914 ... -.4740204
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. 
+. xtscc growth_gdp pol_stability inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2015-year2020, re 
+
+Regression with Driscoll-Kraay standard errors   Number of obs     =       294
+Method: Random-effects GLS regression            Number of groups  =        42
+Group variable (i): country_id                   Wald chi2(11)     =   4060.95
+maximum lag: 2                                   Prob > chi2       =    0.0000
+corr(u_i, Xb) = 0 (assumed)                      overall R-squared =    0.6960
+
+-------------------------------------------------------------------------------
+              |             Drisc/Kraay
+   growth_gdp |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+pol_stability |  -.0934943   .2482215    -0.38   0.719    -.7008704    .5138819
+    inflation |    .028712   .0273237     1.05   0.334    -.0381468    .0955708
+   startbusin |   .0448473   .0247694     1.81   0.120    -.0157612    .1054557
+        urban |  -.0562078   .0146703    -3.83   0.009    -.0921049   -.0203108
+    log_unemp |  -.5183458   .0847277    -6.12   0.001     -.725667   -.3110245
+    schooling |  -.1989365   .0932363    -2.13   0.077    -.4270775    .0292045
+     dummy_eu |   .4760614   .4903109     0.97   0.369    -.7236861    1.675809
+   dummy_oecd |   .2611182   .3737795     0.70   0.511    -.6534872    1.175724
+     year2015 |  -.1904822   .0307118    -6.20   0.001    -.2656312   -.1153333
+     year2016 |  -.3106723   .0276798   -11.22   0.000    -.3784024   -.2429422
+     year2017 |    .524945   .0510353    10.29   0.000     .4000661    .6498239
+     year2018 |   .3762385   .0625188     6.02   0.001     .2232605    .5292165
+     year2019 |  -.3341069   .0757346    -4.41   0.005    -.5194229   -.1487909
+     year2020 |  -6.940951   .0728293   -95.30   0.000    -7.119158   -6.762745
+        _cons |   4.771016   1.994711     2.39   0.054    -.1098656    9.651898
+--------------+----------------------------------------------------------------
+      sigma_u |  .84481347
+      sigma_e |  1.5925432
+          rho |  .21960952   (fraction of variance due to u_i)
+-------------------------------------------------------------------------------
+
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtpcse growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2015-year2020, correlation(ar1) 
+(note: estimates of rho outside [-1,1] bounded to be in the range [-1,1])
+
+Prais-Winsten regression, correlated panels corrected standard errors (PCSEs)
+
+Group variable:   country_id                    Number of obs     =        294
+Time variable:    year                          Number of groups  =         42
+Panels:           correlated (balanced)         Obs per group:
+Autocorrelation:  common AR(1)                                min =          7
+                                                              avg =          7
+                                                              max =          7
+Estimated covariances      =       903          R-squared         =     0.7116
+Estimated autocorrelations =         1          Wald chi2(8)      =   65443.80
+Estimated coefficients     =        15          Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+             |           Panel-corrected
+  growth_gdp |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .1232181   .2245117     0.55   0.583    -.3168167    .5632528
+   inflation |   .0803882   .0603212     1.33   0.183    -.0378391    .1986155
+  startbusin |    .030561   .0170002     1.80   0.072    -.0027588    .0638807
+       urban |  -.0520534   .0130495    -3.99   0.000    -.0776299   -.0264769
+   log_unemp |  -.6079735   .2619459    -2.32   0.020    -1.121378    -.094569
+   schooling |  -.2411698   .1195086    -2.02   0.044    -.4754025   -.0069372
+    dummy_eu |   .3159981   .3934688     0.80   0.422    -.4551865    1.087183
+  dummy_oecd |   .3679969   .2720097     1.35   0.176    -.1651324    .9011262
+    year2015 |   -.137873   .0457331    -3.01   0.003    -.2275082   -.0482378
+    year2016 |  -.2833969   .0222978   -12.71   0.000    -.3270998    -.239694
+    year2017 |   .5101258   .0716695     7.12   0.000     .3696562    .6505954
+    year2018 |    .350733   .0999372     3.51   0.000     .1548596    .5466064
+    year2019 |  -.3192104   .0951053    -3.36   0.001    -.5056133   -.1328075
+    year2020 |  -6.866202   .0647561  -106.03   0.000    -6.993122   -6.739283
+       _cons |   6.052244   1.786073     3.39   0.001     2.551605    9.552882
+-------------+----------------------------------------------------------------
+         rho |   .3839673
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtscc growth_gdp pol_stability inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2015-year2020, re 
+
+Regression with Driscoll-Kraay standard errors   Number of obs     =       294
+Method: Random-effects GLS regression            Number of groups  =        42
+Group variable (i): country_id                   Wald chi2(11)     =   4060.95
+maximum lag: 2                                   Prob > chi2       =    0.0000
+corr(u_i, Xb) = 0 (assumed)                      overall R-squared =    0.6960
+
+-------------------------------------------------------------------------------
+              |             Drisc/Kraay
+   growth_gdp |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+--------------+----------------------------------------------------------------
+pol_stability |  -.0934943   .2482215    -0.38   0.719    -.7008704    .5138819
+    inflation |    .028712   .0273237     1.05   0.334    -.0381468    .0955708
+   startbusin |   .0448473   .0247694     1.81   0.120    -.0157612    .1054557
+        urban |  -.0562078   .0146703    -3.83   0.009    -.0921049   -.0203108
+    log_unemp |  -.5183458   .0847277    -6.12   0.001     -.725667   -.3110245
+    schooling |  -.1989365   .0932363    -2.13   0.077    -.4270775    .0292045
+     dummy_eu |   .4760614   .4903109     0.97   0.369    -.7236861    1.675809
+   dummy_oecd |   .2611182   .3737795     0.70   0.511    -.6534872    1.175724
+     year2015 |  -.1904822   .0307118    -6.20   0.001    -.2656312   -.1153333
+     year2016 |  -.3106723   .0276798   -11.22   0.000    -.3784024   -.2429422
+     year2017 |    .524945   .0510353    10.29   0.000     .4000661    .6498239
+     year2018 |   .3762385   .0625188     6.02   0.001     .2232605    .5292165
+     year2019 |  -.3341069   .0757346    -4.41   0.005    -.5194229   -.1487909
+     year2020 |  -6.940951   .0728293   -95.30   0.000    -7.119158   -6.762745
+        _cons |   4.771016   1.994711     2.39   0.054    -.1098656    9.651898
+--------------+----------------------------------------------------------------
+      sigma_u |  .84481347
+      sigma_e |  1.5925432
+          rho |  .21960952   (fraction of variance due to u_i)
+-------------------------------------------------------------------------------
+
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtpcse growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2015-year2020, correlation(psar1) 
+(note: estimates of rho outside [-1,1] bounded to be in the range [-1,1])
+
+Prais-Winsten regression, correlated panels corrected standard errors (PCSEs)
+
+Group variable:   country_id                    Number of obs     =        294
+Time variable:    year                          Number of groups  =         42
+Panels:           correlated (balanced)         Obs per group:
+Autocorrelation:  panel-specific AR(1)                        min =          7
+                                                              avg =          7
+                                                              max =          7
+Estimated covariances      =       903          R-squared         =     0.7594
+Estimated autocorrelations =        42          Wald chi2(14)     =    7163.62
+Estimated coefficients     =        15          Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+             |           Panel-corrected
+  growth_gdp |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .0212452   .2384372     0.09   0.929    -.4460831    .4885735
+   inflation |   .1203491   .0571489     2.11   0.035     .0083394    .2323588
+  startbusin |   .0331758    .022018     1.51   0.132    -.0099787    .0763302
+       urban |  -.0602765   .0138884    -4.34   0.000    -.0874973   -.0330556
+   log_unemp |   -.538901   .2412862    -2.23   0.026    -1.011813   -.0659887
+   schooling |  -.1746432    .093862    -1.86   0.063    -.3586094    .0093229
+    dummy_eu |   .3412866   .2474971     1.38   0.168    -.1437987    .8263719
+  dummy_oecd |   .1715887   .2596197     0.66   0.509    -.3372565    .6804339
+    year2015 |  -.0926789   .1257563    -0.74   0.461    -.3391568     .153799
+    year2016 |   -.393652   .1536998    -2.56   0.010     -.694898   -.0924059
+    year2017 |   .3594916   .1793696     2.00   0.045     .0079335    .7110496
+    year2018 |   .1028829   .1958259     0.53   0.599    -.2809288    .4866946
+    year2019 |  -.3431997   .1942471    -1.77   0.077    -.7239169    .0375175
+    year2020 |  -7.031828   .1723536   -40.80   0.000    -7.369635   -6.694021
+       _cons |   5.866789   2.879887     2.04   0.042     .2223145    11.51126
+------------------------------------------------------------------------------
+        rhos = -.4017809  .4117654  .5691581  .8508144  .8404914 ... -.4740204
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtscc growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2015-year2020, re 
+
+Regression with Driscoll-Kraay standard errors   Number of obs     =       294
+Method: Random-effects GLS regression            Number of groups  =        42
+Group variable (i): country_id                   Wald chi2(11)     =1214155.71
+maximum lag: 2                                   Prob > chi2       =    0.0000
+corr(u_i, Xb) = 0 (assumed)                      overall R-squared =    0.6960
+
+------------------------------------------------------------------------------
+             |             Drisc/Kraay
+  growth_gdp |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .0747966   .1833601     0.41   0.697    -.3738695    .5234627
+   inflation |   .0318037   .0276245     1.15   0.293    -.0357909    .0993983
+  startbusin |   .0406703   .0260684     1.56   0.170    -.0231168    .1044574
+       urban |  -.0601371   .0112282    -5.36   0.002    -.0876114   -.0326627
+   log_unemp |  -.4823557   .0552034    -8.74   0.000    -.6174335    -.347278
+   schooling |  -.1838312   .0693757    -2.65   0.038    -.3535874    -.014075
+    dummy_eu |   .3908539   .3902236     1.00   0.355    -.5639888    1.345697
+  dummy_oecd |   .2483222   .3560004     0.70   0.512    -.6227793    1.119424
+    year2015 |  -.1763034   .0158668   -11.11   0.000    -.2151282   -.1374787
+    year2016 |  -.2944394   .0225184   -13.08   0.000      -.34954   -.2393389
+    year2017 |   .5455205   .0559539     9.75   0.000     .4086063    .6824347
+    year2018 |   .4013681   .0645913     6.21   0.001     .2433188    .5594174
+    year2019 |   -.297909   .0753152    -3.96   0.007    -.4821985   -.1136194
+    year2020 |  -6.906603   .0695786   -99.26   0.000    -7.076855    -6.73635
+       _cons |    5.15149   2.263003     2.28   0.063    -.3858783    10.68886
+-------------+----------------------------------------------------------------
+     sigma_u |  .83668325
+     sigma_e |   1.591123
+         rho |  .21661554   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. outreg2 [re re_rob regar_re pcar pcpsar scc_re] using models1.doc, replace 
+variable _est_re_rob not found
+r(111);
+
+end of do-file
+
+r(111);
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. xtreg growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2015-year2020, re robust
+
+Random-effects GLS regression                   Number of obs     =        294
+Group variable: country_id                      Number of groups  =         42
+
+R-sq:                                           Obs per group:
+     within  = 0.7410                                         min =          7
+     between = 0.5231                                         avg =        7.0
+     overall = 0.6960                                         max =          7
+
+                                                Wald chi2(14)     =     380.43
+corr(u_i, X)   = 0 (assumed)                    Prob > chi2       =     0.0000
+
+                            (Std. Err. adjusted for 42 clusters in country_id)
+------------------------------------------------------------------------------
+             |               Robust
+  growth_gdp |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .0747966   .3078369     0.24   0.808    -.5285526    .6781458
+   inflation |   .0318037   .0707797     0.45   0.653    -.1069219    .1705293
+  startbusin |   .0406703    .030087     1.35   0.176    -.0182991    .0996397
+       urban |  -.0601371   .0177757    -3.38   0.001    -.0949768   -.0252973
+   log_unemp |  -.4823557   .3474004    -1.39   0.165    -1.163248    .1985365
+   schooling |  -.1838312   .1509031    -1.22   0.223    -.4795959    .1119335
+    dummy_eu |   .3908539   .4434631     0.88   0.378    -.4783179    1.260026
+  dummy_oecd |   .2483221   .4110428     0.60   0.546    -.5573069    1.053951
+    year2015 |  -.1763034   .3041927    -0.58   0.562    -.7725101    .4199032
+    year2016 |  -.2944394   .3505857    -0.84   0.401    -.9815747    .3926958
+    year2017 |   .5455205   .3137207     1.74   0.082    -.0693607    1.160402
+    year2018 |   .4013681     .33991     1.18   0.238    -.2648433    1.067579
+    year2019 |   -.297909   .3646063    -0.82   0.414    -1.012524    .4167063
+    year2020 |  -6.906603   .5378348   -12.84   0.000    -7.960739   -5.852466
+       _cons |    5.15149   3.007622     1.71   0.087    -.7433409    11.04632
+-------------+----------------------------------------------------------------
+     sigma_u |  .83668326
+     sigma_e |   1.591123
+         rho |  .21661555   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+
+. est store re_rob
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. outreg2 [re re_rob regar_re pcar pcpsar scc_re] using models1.doc, replace 
+variable _est_scc_re not found
+r(111);
+
+end of do-file
+
+r(111);
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. 
+. xtscc growth_gdp rule_of_law inflation startbusin urban log_unemp schooling dummy_eu dummy_oecd year2015-year2020, re 
+
+Regression with Driscoll-Kraay standard errors   Number of obs     =       294
+Method: Random-effects GLS regression            Number of groups  =        42
+Group variable (i): country_id                   Wald chi2(11)     =1214155.71
+maximum lag: 2                                   Prob > chi2       =    0.0000
+corr(u_i, Xb) = 0 (assumed)                      overall R-squared =    0.6960
+
+------------------------------------------------------------------------------
+             |             Drisc/Kraay
+  growth_gdp |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+ rule_of_law |   .0747966   .1833601     0.41   0.697    -.3738695    .5234627
+   inflation |   .0318037   .0276245     1.15   0.293    -.0357909    .0993983
+  startbusin |   .0406703   .0260684     1.56   0.170    -.0231168    .1044574
+       urban |  -.0601371   .0112282    -5.36   0.002    -.0876114   -.0326627
+   log_unemp |  -.4823557   .0552034    -8.74   0.000    -.6174335    -.347278
+   schooling |  -.1838312   .0693757    -2.65   0.038    -.3535874    -.014075
+    dummy_eu |   .3908539   .3902236     1.00   0.355    -.5639888    1.345697
+  dummy_oecd |   .2483222   .3560004     0.70   0.512    -.6227793    1.119424
+    year2015 |  -.1763034   .0158668   -11.11   0.000    -.2151282   -.1374787
+    year2016 |  -.2944394   .0225184   -13.08   0.000      -.34954   -.2393389
+    year2017 |   .5455205   .0559539     9.75   0.000     .4086063    .6824347
+    year2018 |   .4013681   .0645913     6.21   0.001     .2433188    .5594174
+    year2019 |   -.297909   .0753152    -3.96   0.007    -.4821985   -.1136194
+    year2020 |  -6.906603   .0695786   -99.26   0.000    -7.076855    -6.73635
+       _cons |    5.15149   2.263003     2.28   0.063    -.3858783    10.68886
+-------------+----------------------------------------------------------------
+     sigma_u |  .83668325
+     sigma_e |   1.591123
+         rho |  .21661554   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+
+
+. est store scc_re
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. 
+. outreg2 [re re_rob regar_re pcar pcpsar scc_re] using models1.doc, replace 
+models1.doc
+dir : seeout
+
+. 
+. outreg2 [pool fe re fe_t re_t re_rob pcpsar scc_re] using models2.doc, replace 
+models2.doc
+dir : seeout
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. outreg2 [pool fe re] using test.doc, replace
+test.doc
+dir : seeout
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD28944.000000"
+
+. outreg2 [pool fe re pool_t fe_t re_t] using test.doc, replace
+test.doc
+dir : seeout
+
+. 
+end of do-file
+
+. exit, clear

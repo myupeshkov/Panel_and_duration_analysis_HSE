@@ -1,0 +1,31 @@
+{\rtf1\fs24
+\trowd\trgaph75\trleft-75\intbl\trqc\clbrdrt\brdrs\cellx2592\clbrdrt\brdrs\cellx4032\clbrdrt\brdrs\cellx5616\clbrdrt\brdrs\cellx7200
+\ql \cell\qc (1)\cell\qc (2)\cell\qc (3)\cell\row
+\trowd\trgaph75\trleft-75\trqc\cellx2592\cellx4032\cellx5616\cellx7200
+\ql \cell\qc pool\cell\qc fe\cell\qc re\cell\row
+\trowd\trgaph75\trleft-75\trqc\cellx2592\cellx4032\cellx5616\cellx7200
+\trowd\trgaph75\trleft-75\trqc\clbrdrb\brdrs\cellx2592\clbrdrb\brdrs\cellx4032\clbrdrb\brdrs\cellx5616\clbrdrb\brdrs\cellx7200
+\ql VARIABLES\cell\qc lQ_Tobin\cell\qc lQ_Tobin\cell\qc lQ_Tobin\cell\row
+\trowd\trgaph75\trleft-75\trqc\cellx2592\cellx4032\cellx5616\cellx7200
+\ql \cell\qc \cell\qc \cell\qc \cell\row
+\ql DtE\cell\qc -0.433***\cell\qc -0.0484***\cell\qc -0.0962***\cell\row
+\ql \cell\qc (0.0312)\cell\qc (0.0186)\cell\qc (0.0184)\cell\row
+\ql l_RD\cell\qc 0.0799***\cell\qc -0.0529***\cell\qc -0.0140\cell\row
+\ql \cell\qc (0.0138)\cell\qc (0.0123)\cell\qc (0.0114)\cell\row
+\ql lEmp\cell\qc -0.282***\cell\qc -0.394***\cell\qc -0.313***\cell\row
+\ql \cell\qc (0.0178)\cell\qc (0.0298)\cell\qc (0.0208)\cell\row
+\ql _IYear_2011\cell\qc -0.0633\cell\qc -0.0411***\cell\qc -0.0504***\cell\row
+\ql \cell\qc (0.0550)\cell\qc (0.00824)\cell\qc (0.00846)\cell\row
+\ql _IYear_2012\cell\qc -0.103*\cell\qc -0.0830***\cell\qc -0.0947***\cell\row
+\ql \cell\qc (0.0550)\cell\qc (0.00851)\cell\qc (0.00861)\cell\row
+\ql Constant\cell\qc 1.435***\cell\qc 4.622***\cell\qc 3.192***\cell\row
+\ql \cell\qc (0.211)\cell\qc (0.330)\cell\qc (0.238)\cell\row
+\ql \cell\qc \cell\qc \cell\qc \cell\row
+\ql Observations\cell\qc 1,131\cell\qc 1,131\cell\qc 1,131\cell\row
+\ql R-squared\cell\qc 0.355\cell\qc 0.387\cell\qc \cell\row
+\trowd\trgaph75\trleft-75\trqc\trbrdrb\brdrs\clbrdrb\brdrs\cellx2592\clbrdrb\brdrs\cellx4032\clbrdrb\brdrs\cellx5616\clbrdrb\brdrs\cellx7200
+\ql Number of Comp_ID\cell\qc \cell\qc 377\cell\qc 377\cell\row
+\pard\qc
+Standard errors in parentheses\par
+*** p<0.01, ** p<0.05, * p<0.1\par
+}

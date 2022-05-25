@@ -1,0 +1,39 @@
+{\rtf1\fs24
+\trowd\trgaph75\trleft-75\intbl\trqc\clbrdrt\brdrs\cellx2592\clbrdrt\brdrs\cellx4320\clbrdrt\brdrs\cellx6048\clbrdrt\brdrs\cellx7776
+\ql \cell\qc (1)\cell\qc (2)\cell\qc (3)\cell\row
+\trowd\trgaph75\trleft-75\trqc\cellx2592\cellx4320\cellx6048\cellx7776
+\ql \cell\qc fixed\cell\qc ols\cell\qc areg\cell\row
+\trowd\trgaph75\trleft-75\trqc\cellx2592\cellx4320\cellx6048\cellx7776
+\trowd\trgaph75\trleft-75\trqc\clbrdrb\brdrs\cellx2592\clbrdrb\brdrs\cellx4320\clbrdrb\brdrs\cellx6048\clbrdrb\brdrs\cellx7776
+\ql VARIABLES\cell\qc y\cell\qc y\cell\qc y\cell\row
+\trowd\trgaph75\trleft-75\trqc\cellx2592\cellx4320\cellx6048\cellx7776
+\ql \cell\qc \cell\qc \cell\qc \cell\row
+\ql x1\cell\qc 2.425e+09**\cell\qc 2.425e+09**\cell\qc 2.425e+09**\cell\row
+\ql \cell\qc (1.157e+09)\cell\qc (1.157e+09)\cell\qc (1.157e+09)\cell\row
+\ql x2\cell\qc 1.823e+09\cell\qc 1.823e+09\cell\qc 1.823e+09\cell\row
+\ql \cell\qc (2.028e+09)\cell\qc (2.028e+09)\cell\qc (2.028e+09)\cell\row
+\ql x3\cell\qc 3.097e+08\cell\qc 3.097e+08\cell\qc 3.097e+08\cell\row
+\ql \cell\qc (3.686e+08)\cell\qc (3.686e+08)\cell\qc (3.686e+08)\cell\row
+\ql 2.country\cell\qc \cell\qc -5.961e+09\cell\qc \cell\row
+\ql \cell\qc \cell\qc (4.990e+09)\cell\qc \cell\row
+\ql 3.country\cell\qc \cell\qc -1.598e+09\cell\qc \cell\row
+\ql \cell\qc \cell\qc (1.970e+09)\cell\qc \cell\row
+\ql 4.country\cell\qc \cell\qc -2.091e+09\cell\qc \cell\row
+\ql \cell\qc \cell\qc (5.348e+09)\cell\qc \cell\row
+\ql 5.country\cell\qc \cell\qc -5.732e+09\cell\qc \cell\row
+\ql \cell\qc \cell\qc (5.199e+09)\cell\qc \cell\row
+\ql 6.country\cell\qc \cell\qc 8.026e+08\cell\qc \cell\row
+\ql \cell\qc \cell\qc (1.405e+09)\cell\qc \cell\row
+\ql 7.country\cell\qc \cell\qc -1.375e+09\cell\qc \cell\row
+\ql \cell\qc \cell\qc (2.458e+09)\cell\qc \cell\row
+\ql Constant\cell\qc -2.060e+08\cell\qc 2.073e+09\cell\qc -2.060e+08\cell\row
+\ql \cell\qc (8.916e+08)\cell\qc (2.048e+09)\cell\qc (8.916e+08)\cell\row
+\ql \cell\qc \cell\qc \cell\qc \cell\row
+\ql Observations\cell\qc 70\cell\qc 70\cell\qc 70\cell\row
+\ql R-squared\cell\qc 0.101\cell\qc 0.249\cell\qc 0.249\cell\row
+\trowd\trgaph75\trleft-75\trqc\trbrdrb\brdrs\clbrdrb\brdrs\cellx2592\clbrdrb\brdrs\cellx4320\clbrdrb\brdrs\cellx6048\clbrdrb\brdrs\cellx7776
+\ql Number of country\cell\qc 7\cell\qc \cell\qc \cell\row
+\pard\qc
+Standard errors in parentheses\par
+*** p<0.01, ** p<0.05, * p<0.1\par
+}

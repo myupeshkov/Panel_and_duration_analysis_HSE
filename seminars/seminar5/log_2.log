@@ -1,0 +1,1117 @@
+----------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /Users/mypeshkov/Desktop/seminars_panel/seminar5/log_2.log
+  log type:  text
+ opened on:  30 Sep 2021, 14:55:27
+
+. 
+. tsset pid wave
+no variables defined
+r(111);
+
+end of do-file
+
+r(111);
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. use ht2015.dta
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. tsset pid wave
+       panel variable:  pid (unbalanced)
+        time variable:  wave, 1 to 11, but with gaps
+                delta:  1 unit
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. xtdes
+
+     pid:  10007857, 10014578, ..., 1.194e+08                n =      14245
+    wave:  1, 2, ..., 11                                     T =         11
+           Delta(wave) = 1 unit
+           Span(wave)  = 11 periods
+           (pid*wave uniquely identifies each observation)
+
+Distribution of T_i:   min      5%     25%       50%       75%     95%     max
+                         1       1       1         3         8      11      11
+
+     Freq.  Percent    Cum. |  Pattern
+ ---------------------------+-------------
+     2356     16.54   16.54 |  ..........1
+     2190     15.37   31.91 |  11111111111
+     2127     14.93   46.84 |  ........111
+      707      4.96   51.81 |  ......11111
+      596      4.18   55.99 |  1..........
+      580      4.07   60.06 |  .........11
+      339      2.38   62.44 |  ........1..
+      327      2.30   64.74 |  11.........
+      292      2.05   66.79 |  ........11.
+     4731     33.21  100.00 | (other patterns)
+ ---------------------------+-------------
+    14245    100.00         |  XXXXXXXXXXX
+
+. xtsum
+
+Variable         |      Mean   Std. Dev.       Min        Max |    Observations
+-----------------+--------------------------------------------+----------------
+pid      overall |  3.38e+07   3.38e+07   1.00e+07   1.19e+08 |     N =   65033
+         between |             4.29e+07   1.00e+07   1.19e+08 |     n =   14245
+         within  |                    0   3.38e+07   3.38e+07 | T-bar = 4.56532
+                 |                                            |
+wave     overall |  6.737779   3.287967          1         11 |     N =   65033
+         between |              3.05681          1         11 |     n =   14245
+         within  |              2.43817  -.0622207   13.48778 | T-bar = 4.56532
+                 |                                            |
+logpay   overall |  6.737289   .8077054  -.1067718   10.97223 |     N =   41994
+         between |             .7973848  -.1067718   9.214394 |     n =   10007
+         within  |             .2770016   3.562713   9.556916 | T-bar = 4.19646
+                 |                                            |
+sex      overall |  .4649486   .4987737          0          1 |     N =   65033
+         between |             .4995079          0          1 |     n =   14245
+         within  |                    0   .4649486   .4649486 | T-bar = 4.56532
+                 |                                            |
+age      overall |  43.16759   8.453778         30         59 |     N =   65033
+         between |             8.973876         30         59 |     n =   14245
+         within  |             2.439374   29.66759   49.91759 | T-bar = 4.56532
+                 |                                            |
+agesq    overall |  1934.906   745.1362        900       3481 |     N =   65033
+         between |             790.3037        900       3481 |     n =   14245
+         within  |             215.8708   611.4062   2629.573 | T-bar = 4.56532
+                 |                                            |
+hiqual   overall |  .3723913   .4834456          0          1 |     N =   65023
+         between |             .4599329          0          1 |     n =   14235
+         within  |             .1684298  -.5366996   1.281482 | T-bar = 4.56783
+                 |                                            |
+pnjuwks  overall |  1.970932   8.846905          0   52.28571 |     N =   52857
+         between |             7.933267          0   52.21428 |     n =   10723
+         within  |             6.064288  -44.95764   49.02807 | T-bar = 4.92931
+                 |                                            |
+pur      overall |  .0687046   .0300789   .0050125   .1691942 |     N =   43982
+         between |             .0243353   .0059076   .1669901 |     n =    9688
+         within  |             .0199372  -.0205712   .1479405 | T-bar = 4.53984
+                 |                                            |
+pvacflow overall |   .008814   .0037814   .0000705   .0410635 |     N =   43982
+         between |             .0038092   .0006841   .0410635 |     n =    9688
+         within  |             .0023415  -.0062356   .0312324 | T-bar = 4.53984
+                 |                                            |
+punflow  overall |  .0116549   .0047893   .0010741   .0629717 |     N =   43982
+         between |              .004681   .0019692   .0629717 |     n =    9688
+         within  |             .0028197  -.0110348   .0490038 | T-bar = 4.53984
+                 |                                            |
+pahgs    overall |   46.0089   13.50711      17.52      82.05 |     N =   65033
+         between |             12.52211      17.52      82.05 |     n =   14245
+         within  |                    0    46.0089    46.0089 | T-bar = 4.56532
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. set mem 500000
+set memory ignored.
+    Memory no longer needs to be set in modern Statas; memory adjustments are
+    performed on the fly automatically.
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. xtreg pnjuwks pur punflow pvacflow age agesq sex, fe
+note: sex omitted because of collinearity
+
+Fixed-effects (within) regression               Number of obs     =     43,982
+Group variable: pid                             Number of groups  =      9,688
+
+R-sq:                                           Obs per group:
+     within  = 0.0041                                         min =          1
+     between = 0.0005                                         avg =        4.5
+     overall = 0.0020                                         max =          9
+
+                                                F(5,34289)        =      28.38
+corr(u_i, Xb)  = -0.0312                        Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+     pnjuwks |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         pur |   17.33413    2.93015     5.92   0.000     11.59094    23.07732
+     punflow |   -14.9577   16.00685    -0.93   0.350    -46.33167    16.41626
+    pvacflow |   20.27478   15.52794     1.31   0.192    -10.16049    50.71005
+         age |  -.0834637   .0936644    -0.89   0.373    -.2670492    .1001217
+       agesq |    .000458   .0010305     0.44   0.657    -.0015618    .0024777
+         sex |          0  (omitted)
+       _cons |   3.531085   2.246262     1.57   0.116    -.8716633    7.933832
+-------------+----------------------------------------------------------------
+     sigma_u |  8.1717488
+     sigma_e |  6.7905501
+         rho |  .59153194   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(9687, 34289) = 4.26                 Prob > F = 0.0000
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. 
+. test pur punflow pvacflow
+
+ ( 1)  pur = 0
+ ( 2)  punflow = 0
+ ( 3)  pvacflow = 0
+
+       F(  3, 34289) =   13.82
+            Prob > F =    0.0000
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. test punflow pvacflow
+
+ ( 1)  punflow = 0
+ ( 2)  pvacflow = 0
+
+       F(  2, 34289) =    1.00
+            Prob > F =    0.3661
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. ssc install xtoverid
+checking xtoverid consistency and verifying not already installed...
+installing into /Users/mypeshkov/Library/Application Support/Stata/ado/plus/...
+installation complete.
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. ssc install xtivreg2
+checking xtivreg2 consistency and verifying not already installed...
+installing into /Users/mypeshkov/Library/Application Support/Stata/ado/plus/...
+installation complete.
+
+. ssc install ranktest
+checking ranktest consistency and verifying not already installed...
+installing into /Users/mypeshkov/Library/Application Support/Stata/ado/plus/...
+installation complete.
+
+. ssc install ivreg2
+checking ivreg2 consistency and verifying not already installed...
+installing into /Users/mypeshkov/Library/Application Support/Stata/ado/plus/...
+installation complete.
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. xtivreg logpay age agesq sex (pnjuwks=pur punflow pvacflow), fe
+
+Fixed-effects (within) IV regression            Number of obs     =     28,845
+Group variable: pid                             Number of groups  =      6,986
+
+R-sq:                                           Obs per group:
+     within  =      .                                         min =          1
+     between = 0.0058                                         avg =        4.1
+     overall = 0.0044                                         max =          9
+
+                                                Wald chi2(3)      =   6.91e+06
+corr(u_i, Xb)  = -0.2219                        Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+      logpay |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     pnjuwks |  -.0706856    .025066    -2.82   0.005    -.1198141   -.0215571
+         age |   .0854115   .0091917     9.29   0.000     .0673962    .1034269
+       agesq |  -.0008145   .0000912    -8.93   0.000    -.0009933   -.0006357
+         sex |          0  (omitted)
+       _cons |   4.704002   .2558619    18.38   0.000     4.202522    5.205482
+-------------+----------------------------------------------------------------
+     sigma_u |   .8839184
+     sigma_e |  .43523302
+         rho |   .8048624   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F  test that all u_i=0:     F(6985,21856) =     9.04      Prob > F    = 0.0000
+------------------------------------------------------------------------------
+Instrumented:   pnjuwks
+Instruments:    age agesq sex pur punflow pvacflow
+------------------------------------------------------------------------------
+
+. xtoverid
+o. operator not allowed
+r(101);
+
+end of do-file
+
+r(101);
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. findit xtoverid
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. xtoverid
+o. operator not allowed
+r(101);
+
+end of do-file
+
+r(101);
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. xtivreg logpay age agesq sex (pnjuwks=pur punflow pvacflow), fe xtoverid
+option xtoverid not allowed
+r(198);
+
+end of do-file
+
+r(198);
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. xtivreg2 logpay age agesq sex (pnjuwks=pur punflow pvacflow), fe
+Warning - singleton groups detected.  2253 observation(s) not used.
+Warning - collinearities detected
+Vars dropped:       sex
+
+FIXED EFFECTS ESTIMATION
+------------------------
+Number of groups =      4733                    Obs per group: min =         2
+                                                               avg =       5.6
+                                                               max =         9
+Warning - collinearities detected
+Vars dropped:  sex
+
+IV (2SLS) estimation
+--------------------
+
+Estimates efficient for homoskedasticity only
+Statistics consistent for homoskedasticity only
+
+                                                      Number of obs =    26592
+                                                      F(  3, 21856) =   159.20
+                                                      Prob > F      =   0.0000
+Total (centered) SS     =  2043.990518                Centered R2   =  -1.0255
+Total (uncentered) SS   =  2043.990518                Uncentered R2 =  -1.0255
+Residual SS             =  4140.133638                Root MSE      =    .4352
+
+------------------------------------------------------------------------------
+      logpay |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     pnjuwks |  -.0706856   .0250643    -2.82   0.005    -.1198107   -.0215604
+         age |   .0854115   .0091911     9.29   0.000     .0673974    .1034257
+       agesq |  -.0008145   .0000912    -8.93   0.000    -.0009932   -.0006357
+         sex |          0  (omitted)
+------------------------------------------------------------------------------
+Underidentification test (Anderson canon. corr. LM statistic):          13.112
+                                                   Chi-sq(3) P-val =    0.0044
+------------------------------------------------------------------------------
+Weak identification test (Cragg-Donald Wald F statistic):                4.372
+Stock-Yogo weak ID test critical values:  5% maximal IV relative bias    13.91
+                                         10% maximal IV relative bias     9.08
+                                         20% maximal IV relative bias     6.46
+                                         30% maximal IV relative bias     5.39
+                                         10% maximal IV size             22.30
+                                         15% maximal IV size             12.83
+                                         20% maximal IV size              9.54
+                                         25% maximal IV size              7.80
+Source: Stock-Yogo (2005).  Reproduced by permission.
+------------------------------------------------------------------------------
+Sargan statistic (overidentification test of all instruments):           1.129
+                                                   Chi-sq(2) P-val =    0.5687
+------------------------------------------------------------------------------
+Instrumented:         pnjuwks
+Included instruments: age agesq
+Excluded instruments: pur punflow pvacflow
+Dropped collinear:    sex
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. findit xtivreg2
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. xtivreg logpay age agesq sex (pnjuwks=pur punflow pvacflow), fe 
+
+Fixed-effects (within) IV regression            Number of obs     =     28,845
+Group variable: pid                             Number of groups  =      6,986
+
+R-sq:                                           Obs per group:
+     within  =      .                                         min =          1
+     between = 0.0058                                         avg =        4.1
+     overall = 0.0044                                         max =          9
+
+                                                Wald chi2(3)      =   6.91e+06
+corr(u_i, Xb)  = -0.2219                        Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+      logpay |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     pnjuwks |  -.0706856    .025066    -2.82   0.005    -.1198141   -.0215571
+         age |   .0854115   .0091917     9.29   0.000     .0673962    .1034269
+       agesq |  -.0008145   .0000912    -8.93   0.000    -.0009933   -.0006357
+         sex |          0  (omitted)
+       _cons |   4.704002   .2558619    18.38   0.000     4.202522    5.205482
+-------------+----------------------------------------------------------------
+     sigma_u |   .8839184
+     sigma_e |  .43523302
+         rho |   .8048624   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F  test that all u_i=0:     F(6985,21856) =     9.04      Prob > F    = 0.0000
+------------------------------------------------------------------------------
+Instrumented:   pnjuwks
+Instruments:    age agesq sex pur punflow pvacflow
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. xtoverid
+o. operator not allowed
+r(101);
+
+end of do-file
+
+r(101);
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. xtivreg logpay age agesq sex (pnjuwks=pur punflow pvacflow), re
+
+G2SLS random-effects IV regression              Number of obs     =     28,845
+Group variable: pid                             Number of groups  =      6,986
+
+R-sq:                                           Obs per group:
+     within  = 0.0072                                         min =          1
+     between = 0.1063                                         avg =        4.1
+     overall = 0.0924                                         max =          9
+
+                                                Wald chi2(4)      =     726.70
+corr(u_i, X)       = 0 (assumed)                Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+      logpay |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     pnjuwks |  -.1792423   .0251765    -7.12   0.000    -.2285873   -.1298973
+         age |    .056027   .0127295     4.40   0.000     .0310777    .0809764
+       agesq |  -.0006733   .0001442    -4.67   0.000    -.0009559   -.0003906
+         sex |   1.003942   .0409103    24.54   0.000     .9237595    1.084125
+       _cons |   5.330892   .2835105    18.80   0.000     4.775222    5.886563
+-------------+----------------------------------------------------------------
+     sigma_u |  .65672866
+     sigma_e |  .43524298
+         rho |  .69481617   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+Instrumented:   pnjuwks
+Instruments:    age agesq sex pur punflow pvacflow
+------------------------------------------------------------------------------
+
+. xtoverid
+
+Test of overidentifying restrictions: 
+Cross-section time-series model: xtivreg g2sls   
+Sargan-Hansen statistic   0.638  Chi-sq(2)    P-value = 0.7268
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. xtivreg2 logpay age agesq sex (pnjuwks=pur punflow pvacflow), fe
+Warning - singleton groups detected.  2253 observation(s) not used.
+Warning - collinearities detected
+Vars dropped:       sex
+
+FIXED EFFECTS ESTIMATION
+------------------------
+Number of groups =      4733                    Obs per group: min =         2
+                                                               avg =       5.6
+                                                               max =         9
+Warning - collinearities detected
+Vars dropped:  sex
+
+IV (2SLS) estimation
+--------------------
+
+Estimates efficient for homoskedasticity only
+Statistics consistent for homoskedasticity only
+
+                                                      Number of obs =    26592
+                                                      F(  3, 21856) =   159.20
+                                                      Prob > F      =   0.0000
+Total (centered) SS     =  2043.990518                Centered R2   =  -1.0255
+Total (uncentered) SS   =  2043.990518                Uncentered R2 =  -1.0255
+Residual SS             =  4140.133638                Root MSE      =    .4352
+
+------------------------------------------------------------------------------
+      logpay |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     pnjuwks |  -.0706856   .0250643    -2.82   0.005    -.1198107   -.0215604
+         age |   .0854115   .0091911     9.29   0.000     .0673974    .1034257
+       agesq |  -.0008145   .0000912    -8.93   0.000    -.0009932   -.0006357
+         sex |          0  (omitted)
+------------------------------------------------------------------------------
+Underidentification test (Anderson canon. corr. LM statistic):          13.112
+                                                   Chi-sq(3) P-val =    0.0044
+------------------------------------------------------------------------------
+Weak identification test (Cragg-Donald Wald F statistic):                4.372
+Stock-Yogo weak ID test critical values:  5% maximal IV relative bias    13.91
+                                         10% maximal IV relative bias     9.08
+                                         20% maximal IV relative bias     6.46
+                                         30% maximal IV relative bias     5.39
+                                         10% maximal IV size             22.30
+                                         15% maximal IV size             12.83
+                                         20% maximal IV size              9.54
+                                         25% maximal IV size              7.80
+Source: Stock-Yogo (2005).  Reproduced by permission.
+------------------------------------------------------------------------------
+Sargan statistic (overidentification test of all instruments):           1.129
+                                                   Chi-sq(2) P-val =    0.5687
+------------------------------------------------------------------------------
+Instrumented:         pnjuwks
+Included instruments: age agesq
+Excluded instruments: pur punflow pvacflow
+Dropped collinear:    sex
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. xtivreg logpay age agesq sex (pnjuwks=pur punflow pvacflow), fe
+
+Fixed-effects (within) IV regression            Number of obs     =     28,845
+Group variable: pid                             Number of groups  =      6,986
+
+R-sq:                                           Obs per group:
+     within  =      .                                         min =          1
+     between = 0.0058                                         avg =        4.1
+     overall = 0.0044                                         max =          9
+
+                                                Wald chi2(3)      =   6.91e+06
+corr(u_i, Xb)  = -0.2219                        Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+      logpay |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     pnjuwks |  -.0706856    .025066    -2.82   0.005    -.1198141   -.0215571
+         age |   .0854115   .0091917     9.29   0.000     .0673962    .1034269
+       agesq |  -.0008145   .0000912    -8.93   0.000    -.0009933   -.0006357
+         sex |          0  (omitted)
+       _cons |   4.704002   .2558619    18.38   0.000     4.202522    5.205482
+-------------+----------------------------------------------------------------
+     sigma_u |   .8839184
+     sigma_e |  .43523302
+         rho |   .8048624   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F  test that all u_i=0:     F(6985,21856) =     9.04      Prob > F    = 0.0000
+------------------------------------------------------------------------------
+Instrumented:   pnjuwks
+Instruments:    age agesq sex pur punflow pvacflow
+------------------------------------------------------------------------------
+
+. est store fe_iv
+
+. xtreg logpay age agesq sex pnjuwks, fe
+note: sex omitted because of collinearity
+
+Fixed-effects (within) regression               Number of obs     =     34,631
+Group variable: pid                             Number of groups  =      7,794
+
+R-sq:                                           Obs per group:
+     within  = 0.0541                                         min =          1
+     between = 0.0013                                         avg =        4.4
+     overall = 0.0008                                         max =         10
+
+                                                F(3,26834)        =     511.50
+corr(u_i, Xb)  = -0.2849                        Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+      logpay |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         age |   .0960399   .0046105    20.83   0.000     .0870031    .1050766
+       agesq |  -.0008265   .0000527   -15.68   0.000    -.0009299   -.0007232
+         sex |          0  (omitted)
+     pnjuwks |  -.0039719   .0003935   -10.09   0.000    -.0047431   -.0032006
+       _cons |   4.218991    .099754    42.29   0.000     4.023468    4.414514
+-------------+----------------------------------------------------------------
+     sigma_u |  .83519148
+     sigma_e |  .30536398
+         rho |  .88208383   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(7793, 26834) = 27.45                Prob > F = 0.0000
+
+. est store fe
+
+. hausman fe_iv fe
+
+                 ---- Coefficients ----
+             |      (b)          (B)            (b-B)     sqrt(diag(V_b-V_B))
+             |     fe_iv          fe         Difference          S.E.
+-------------+----------------------------------------------------------------
+     pnjuwks |   -.0706856    -.0039719       -.0667137        .0250629
+         age |    .0854115     .0960399       -.0106283        .0079518
+       agesq |   -.0008145    -.0008265         .000012        .0000744
+------------------------------------------------------------------------------
+                         b = consistent under Ho and Ha; obtained from xtivreg
+            B = inconsistent under Ha, efficient under Ho; obtained from xtreg
+
+    Test:  Ho:  difference in coefficients not systematic
+
+                  chi2(3) = (b-B)'[(V_b-V_B)^(-1)](b-B)
+                          =       10.28
+                Prob>chi2 =      0.0163
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. xtivreg logpay age agesq sex (pnjuwks=pur punflow pvacflow), re
+
+G2SLS random-effects IV regression              Number of obs     =     28,845
+Group variable: pid                             Number of groups  =      6,986
+
+R-sq:                                           Obs per group:
+     within  = 0.0072                                         min =          1
+     between = 0.1063                                         avg =        4.1
+     overall = 0.0924                                         max =          9
+
+                                                Wald chi2(4)      =     726.70
+corr(u_i, X)       = 0 (assumed)                Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+      logpay |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     pnjuwks |  -.1792423   .0251765    -7.12   0.000    -.2285873   -.1298973
+         age |    .056027   .0127295     4.40   0.000     .0310777    .0809764
+       agesq |  -.0006733   .0001442    -4.67   0.000    -.0009559   -.0003906
+         sex |   1.003942   .0409103    24.54   0.000     .9237595    1.084125
+       _cons |   5.330892   .2835105    18.80   0.000     4.775222    5.886563
+-------------+----------------------------------------------------------------
+     sigma_u |  .65672866
+     sigma_e |  .43524298
+         rho |  .69481617   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+Instrumented:   pnjuwks
+Instruments:    age agesq sex pur punflow pvacflow
+------------------------------------------------------------------------------
+
+. est store re_iv
+
+. xtreg logpay age agesq sex pnjuwks, re
+
+Random-effects GLS regression                   Number of obs     =     34,631
+Group variable: pid                             Number of groups  =      7,794
+
+R-sq:                                           Obs per group:
+     within  = 0.0471                                         min =          1
+     between = 0.2346                                         avg =        4.4
+     overall = 0.2344                                         max =         10
+
+                                                Wald chi2(4)      =    3708.06
+corr(u_i, X)   = 0 (assumed)                    Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+      logpay |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         age |   .0813391   .0042757    19.02   0.000      .072959    .0897193
+       agesq |  -.0007942    .000049   -16.20   0.000    -.0008902   -.0006981
+         sex |   .8151798   .0155194    52.53   0.000     .7847623    .8455973
+     pnjuwks |  -.0056232   .0003815   -14.74   0.000    -.0063709   -.0048755
+       _cons |   4.359107    .091762    47.50   0.000     4.179257    4.538957
+-------------+----------------------------------------------------------------
+     sigma_u |  .64869954
+     sigma_e |  .30536398
+         rho |  .81860585   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+
+. est store re
+
+. hausman re_iv re
+
+                 ---- Coefficients ----
+             |      (b)          (B)            (b-B)     sqrt(diag(V_b-V_B))
+             |     re_iv          re         Difference          S.E.
+-------------+----------------------------------------------------------------
+     pnjuwks |   -.1792423    -.0056232       -.1736191        .0251736
+         age |     .056027     .0813391       -.0253121        .0119899
+       agesq |   -.0006733    -.0007942        .0001209        .0001356
+         sex |    1.003942     .8151798        .1887625        .0378524
+------------------------------------------------------------------------------
+                         b = consistent under Ho and Ha; obtained from xtivreg
+            B = inconsistent under Ha, efficient under Ho; obtained from xtreg
+
+    Test:  Ho:  difference in coefficients not systematic
+
+                  chi2(4) = (b-B)'[(V_b-V_B)^(-1)](b-B)
+                          =       72.17
+                Prob>chi2 =      0.0000
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. hausman fe_iv re_iv
+
+                 ---- Coefficients ----
+             |      (b)          (B)            (b-B)     sqrt(diag(V_b-V_B))
+             |     fe_iv        re_iv        Difference          S.E.
+-------------+----------------------------------------------------------------
+     pnjuwks |   -.0706856    -.1792423        .1085567               .
+         age |    .0854115      .056027        .0293845               .
+       agesq |   -.0008145    -.0006733       -.0001412               .
+------------------------------------------------------------------------------
+                         b = consistent under Ho and Ha; obtained from xtivreg
+          B = inconsistent under Ha, efficient under Ho; obtained from xtivreg
+
+    Test:  Ho:  difference in coefficients not systematic
+
+                  chi2(3) = (b-B)'[(V_b-V_B)^(-1)](b-B)
+                          =       43.30
+                Prob>chi2 =      0.0000
+                (V_b-V_B is not positive definite)
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. ssc install outreg2
+checking outreg2 consistency and verifying not already installed...
+all files already exist and are up to date.
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. outreg2[re fe re_iv fe iv]
+must specify the full syntax (the last preference has expired)
+r(100);
+
+end of do-file
+
+r(100);
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. outreg2[re fe re_iv fe iv] using test.doc, replace
+variable _est_iv not found
+r(111);
+
+end of do-file
+
+r(111);
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. outreg2[re fe re_iv fe_iv] using test.doc, replace
+test.doc
+dir : seeout
+
+. 
+end of do-file
+
+. shellout using `"test.doc"'
+shellout probably will not work with MacOSX
+
+zsh:1: command not found: test.doc
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. qui by pid: gen hieduc=hiqual[_N]
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. xtreg logpay age agesq sex pahgs hieduc pnjuwks, fe
+note: sex omitted because of collinearity
+note: pahgs omitted because of collinearity
+note: hieduc omitted because of collinearity
+
+Fixed-effects (within) regression               Number of obs     =     34,631
+Group variable: pid                             Number of groups  =      7,794
+
+R-sq:                                           Obs per group:
+     within  = 0.0541                                         min =          1
+     between = 0.0013                                         avg =        4.4
+     overall = 0.0008                                         max =         10
+
+                                                F(3,26834)        =     511.50
+corr(u_i, Xb)  = -0.2849                        Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+      logpay |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         age |   .0960399   .0046105    20.83   0.000     .0870031    .1050766
+       agesq |  -.0008265   .0000527   -15.68   0.000    -.0009299   -.0007232
+         sex |          0  (omitted)
+       pahgs |          0  (omitted)
+      hieduc |          0  (omitted)
+     pnjuwks |  -.0039719   .0003935   -10.09   0.000    -.0047431   -.0032006
+       _cons |   4.218991    .099754    42.29   0.000     4.023468    4.414514
+-------------+----------------------------------------------------------------
+     sigma_u |  .83519148
+     sigma_e |  .30536398
+         rho |  .88208383   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+F test that all u_i=0: F(7793, 26834) = 27.45                Prob > F = 0.0000
+
+. predict residfe, ue
+(30,402 missing values generated)
+
+. xtreg residfe sex pahgs hieduc, be
+
+Between regression (regression on group means)  Number of obs     =     34,631
+Group variable: pid                             Number of groups  =      7,794
+
+R-sq:                                           Obs per group:
+     within  = 0.0000                                         min =          1
+     between = 0.3236                                         avg =        4.4
+     overall = 0.3158                                         max =         10
+
+                                                F(3,7790)         =    1242.43
+sd(u_i + avg(e_i.))=  .6870105                  Prob > F          =     0.0000
+
+------------------------------------------------------------------------------
+     residfe |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         sex |   .7668511   .0156744    48.92   0.000     .7361252    .7975771
+       pahgs |   .0076654   .0005769    13.29   0.000     .0065345    .0087963
+      hieduc |    .408689   .0159701    25.59   0.000     .3773833    .4399946
+       _cons |  -.9453119   .0280319   -33.72   0.000    -1.000262    -.890362
+------------------------------------------------------------------------------
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. est store be
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. xthtaylor logpay age agesq sex pahgs hieduc pnjuwks, ///
+> endog(pnjuwks hieduc)
+
+Hausman-Taylor estimation                       Number of obs     =     34,631
+Group variable: pid                             Number of groups  =      7,794
+
+                                                Obs per group:
+                                                              min =          1
+                                                              avg =        4.4
+                                                              max =         10
+
+Random effects u_i ~ i.i.d.                     Wald chi2(6)      =    1996.53
+                                                Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+      logpay |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+TVexogenous  |
+         age |   .0955335   .0043134    22.15   0.000     .0870795    .1039876
+       agesq |  -.0008239   .0000494   -16.69   0.000    -.0009206   -.0007271
+TVendogenous |
+     pnjuwks |  -.0039731   .0003684   -10.79   0.000    -.0046951   -.0032512
+TIexogenous  |
+         sex |   .4503195   .0703738     6.40   0.000     .3123894    .5882496
+       pahgs |  -.0126773   .0035517    -3.57   0.000    -.0196384   -.0057161
+TIendogenous |
+      hieduc |   3.373158    .415849     8.11   0.000     2.558109    4.188207
+             |
+       _cons |   2.956555   .1419878    20.82   0.000     2.678264    3.234846
+-------------+----------------------------------------------------------------
+     sigma_u |  2.3739213
+     sigma_e |  .30534692
+         rho |  .98372474   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+Note: TV refers to time varying; TI refers to time invariant.
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. xthtaylor logpay age agesq sex pahgs hieduc pnjuwks, ///
+> endog(pnjuwks hieduc)
+
+Hausman-Taylor estimation                       Number of obs     =     34,631
+Group variable: pid                             Number of groups  =      7,794
+
+                                                Obs per group:
+                                                              min =          1
+                                                              avg =        4.4
+                                                              max =         10
+
+Random effects u_i ~ i.i.d.                     Wald chi2(6)      =    1996.53
+                                                Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+      logpay |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+TVexogenous  |
+         age |   .0955335   .0043134    22.15   0.000     .0870795    .1039876
+       agesq |  -.0008239   .0000494   -16.69   0.000    -.0009206   -.0007271
+TVendogenous |
+     pnjuwks |  -.0039731   .0003684   -10.79   0.000    -.0046951   -.0032512
+TIexogenous  |
+         sex |   .4503195   .0703738     6.40   0.000     .3123894    .5882496
+       pahgs |  -.0126773   .0035517    -3.57   0.000    -.0196384   -.0057161
+TIendogenous |
+      hieduc |   3.373158    .415849     8.11   0.000     2.558109    4.188207
+             |
+       _cons |   2.956555   .1419878    20.82   0.000     2.678264    3.234846
+-------------+----------------------------------------------------------------
+     sigma_u |  2.3739213
+     sigma_e |  .30534692
+         rho |  .98372474   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+Note: TV refers to time varying; TI refers to time invariant.
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. xtoverid
+
+Test of overidentifying restrictions: 
+Cross-section time-series model: xthtaylor htaylor   
+Sargan-Hansen statistic  10.082  Chi-sq(1)    P-value = 0.0015
+
+. est store ht1
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. xthtaylor logpay age agesq sex pur pahgs hieduc pnjuwks, ///
+> endog(pnjuwks hieduc)
+
+Hausman-Taylor estimation                       Number of obs     =     28,845
+Group variable: pid                             Number of groups  =      6,986
+
+                                                Obs per group:
+                                                              min =          1
+                                                              avg =        4.1
+                                                              max =          9
+
+Random effects u_i ~ i.i.d.                     Wald chi2(7)      =    1686.00
+                                                Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+      logpay |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+TVexogenous  |
+         age |   .0935697   .0050272    18.61   0.000     .0837166    .1034229
+       agesq |  -.0008687   .0000565   -15.38   0.000    -.0009795    -.000758
+         pur |  -.5823813   .1298487    -4.49   0.000    -.8368801   -.3278825
+TVendogenous |
+     pnjuwks |  -.0045501   .0003941   -11.55   0.000    -.0053226   -.0037777
+TIexogenous  |
+         sex |   .5471068   .0578954     9.45   0.000     .4336338    .6605797
+       pahgs |   -.007618   .0028672    -2.66   0.008    -.0132375   -.0019984
+TIendogenous |
+      hieduc |   2.648384   .3399218     7.79   0.000      1.98215    3.314619
+             |
+       _cons |   3.209785   .1517101    21.16   0.000     2.912439    3.507131
+-------------+----------------------------------------------------------------
+     sigma_u |  1.8232948
+     sigma_e |  .29815835
+         rho |  .97395531   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+Note: TV refers to time varying; TI refers to time invariant.
+
+. xtoverid
+
+Test of overidentifying restrictions: 
+Cross-section time-series model: xthtaylor htaylor   
+Sargan-Hansen statistic   3.906  Chi-sq(2)    P-value = 0.1419
+
+. est store ht2
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. xthtaylor logpay age agesq sex pur punflow pvacflow pahgs hieduc pnjuwks, ///
+> endog(pnjuwks hieduc)
+
+Hausman-Taylor estimation                       Number of obs     =     28,845
+Group variable: pid                             Number of groups  =      6,986
+
+                                                Obs per group:
+                                                              min =          1
+                                                              avg =        4.1
+                                                              max =          9
+
+Random effects u_i ~ i.i.d.                     Wald chi2(9)      =    1683.51
+                                                Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+      logpay |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+TVexogenous  |
+         age |   .0939735   .0050426    18.64   0.000     .0840902    .1038568
+       agesq |  -.0008677   .0000565   -15.35   0.000    -.0009785   -.0007569
+         pur |  -.7149629   .1491222    -4.79   0.000    -1.007237   -.4226887
+     punflow |   1.527908   .8266223     1.85   0.065    -.0922415    3.148058
+    pvacflow |  -1.181516   .8055504    -1.47   0.142    -2.760366    .3973335
+TVendogenous |
+     pnjuwks |  -.0045493    .000394   -11.55   0.000    -.0053215   -.0037772
+TIexogenous  |
+         sex |   .5447539   .0582902     9.35   0.000     .4305072    .6590006
+       pahgs |  -.0077121   .0028808    -2.68   0.007    -.0133583    -.002066
+TIendogenous |
+      hieduc |   2.669014   .3410427     7.83   0.000     2.000582    3.337445
+             |
+       _cons |   3.187692   .1527287    20.87   0.000     2.888349    3.487035
+-------------+----------------------------------------------------------------
+     sigma_u |  1.8401387
+     sigma_e |  .29813348
+         rho |  .97442195   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+Note: TV refers to time varying; TI refers to time invariant.
+
+. xtoverid
+
+Test of overidentifying restrictions: 
+Cross-section time-series model: xthtaylor htaylor   
+Sargan-Hansen statistic   5.100  Chi-sq(4)    P-value = 0.2772
+
+. est store ht3
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. xtreg logpay age agesq sex pahgs hieduc pnjuwks, re
+
+Random-effects GLS regression                   Number of obs     =     34,631
+Group variable: pid                             Number of groups  =      7,794
+
+R-sq:                                           Obs per group:
+     within  = 0.0487                                         min =          1
+     between = 0.3144                                         avg =        4.4
+     overall = 0.3063                                         max =         10
+
+                                                Wald chi2(6)      =    4971.27
+corr(u_i, X)   = 0 (assumed)                    Prob > chi2       =     0.0000
+
+------------------------------------------------------------------------------
+      logpay |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+         age |    .079526   .0042336    18.78   0.000     .0712283    .0878237
+       agesq |  -.0007618   .0000485   -15.69   0.000    -.0008569   -.0006666
+         sex |   .7702606   .0148244    51.96   0.000     .7412052     .799316
+       pahgs |    .007021   .0005457    12.87   0.000     .0059514    .0080905
+      hieduc |   .3887861   .0151326    25.69   0.000     .3591268    .4184455
+     pnjuwks |  -.0055027   .0003793   -14.51   0.000    -.0062461   -.0047593
+       _cons |   3.888097   .0945152    41.14   0.000     3.702851    4.073344
+-------------+----------------------------------------------------------------
+     sigma_u |  .61465861
+     sigma_e |  .30536398
+         rho |  .80204502   (fraction of variance due to u_i)
+------------------------------------------------------------------------------
+
+. est store re
+
+. 
+. est tab re ht3 ht2 ht1 be, b(%7.4f) star
+
+-------------------------------------------------------------------------------
+    Variable |     re          ht3          ht2          ht1           be      
+-------------+-----------------------------------------------------------------
+         age |  0.0795***    0.0940***    0.0936***    0.0955***               
+       agesq | -0.0008***   -0.0009***   -0.0009***   -0.0008***               
+         sex |  0.7703***    0.5448***    0.5471***    0.4503***    0.7669***  
+       pahgs |  0.0070***   -0.0077**    -0.0076**    -0.0127***    0.0077***  
+      hieduc |  0.3888***    2.6690***    2.6484***    3.3732***    0.4087***  
+     pnjuwks | -0.0055***   -0.0045***   -0.0046***   -0.0040***               
+         pur |              -0.7150***   -0.5824***                            
+     punflow |               1.5279                                            
+    pvacflow |              -1.1815                                            
+       _cons |  3.8881***    3.1877***    3.2098***    2.9566***   -0.9453***  
+-------------------------------------------------------------------------------
+                                       legend: * p<0.05; ** p<0.01; *** p<0.001
+
+. est tab re ht3 ht2 ht1 be, b(%7.4f) se
+
+----------------------------------------------------------------
+    Variable |   re        ht3       ht2       ht1       be     
+-------------+--------------------------------------------------
+         age |  0.0795    0.0940    0.0936    0.0955            
+             |  0.0042    0.0050    0.0050    0.0043            
+       agesq | -0.0008   -0.0009   -0.0009   -0.0008            
+             |  0.0000    0.0001    0.0001    0.0000            
+         sex |  0.7703    0.5448    0.5471    0.4503    0.7669  
+             |  0.0148    0.0583    0.0579    0.0704    0.0157  
+       pahgs |  0.0070   -0.0077   -0.0076   -0.0127    0.0077  
+             |  0.0005    0.0029    0.0029    0.0036    0.0006  
+      hieduc |  0.3888    2.6690    2.6484    3.3732    0.4087  
+             |  0.0151    0.3410    0.3399    0.4158    0.0160  
+     pnjuwks | -0.0055   -0.0045   -0.0046   -0.0040            
+             |  0.0004    0.0004    0.0004    0.0004            
+         pur |           -0.7150   -0.5824                      
+             |            0.1491    0.1298                      
+     punflow |            1.5279                                
+             |            0.8266                                
+    pvacflow |           -1.1815                                
+             |            0.8056                                
+       _cons |  3.8881    3.1877    3.2098    2.9566   -0.9453  
+             |  0.0945    0.1527    0.1517    0.1420    0.0280  
+----------------------------------------------------------------
+                                                    legend: b/se
+
+. 
+end of do-file
+
+. do "/var/folders/_h/yht_202n1jbdzj_1qv3ptvw40000gn/T//SD20146.000000"
+
+. outreg2[re ht3 ht2 ht1 be] using test.doc, append
+test.doc
+dir : seeout
+
+. 
+end of do-file
+
+. exit, clear
